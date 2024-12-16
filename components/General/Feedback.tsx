@@ -2,6 +2,12 @@ import React from 'react'
 import Image from 'next/image'
 import { Textarea } from "@/components/ui/textarea"
 import { QuizButton } from '../QuizComponent/QuizButton';
+import { useParams } from 'next/navigation';
+import { useFormik } from 'formik';
+import DOMPurify from "dompurify";
+import { useSubmitFeedbackMutation } from '@/redux/feature/general/feedback';
+import { toast } from 'react-toastify';
+
 
 type props = {
     title: string;
@@ -11,7 +17,49 @@ type props = {
     placeholder: string;
 }
 
-export const Feedback = ({ title, desc, highlight, buttonTitle , placeholder}: props) => {
+export const Feedback = ({ title, desc, highlight, buttonTitle, placeholder }: props) => {
+    const [submitFeedback] = useSubmitFeedbackMutation();
+    const params = useParams();
+
+    const uuidString = typeof params.uuid === 'string' ? params.uuid : '';
+
+    // console.log("uuid: ", uuidString)
+
+    const formik = useFormik({
+        initialValues: {
+            feedback: "",
+        },
+
+        onSubmit: async (values, { resetForm }) => {
+
+            if (!values.feedback.trim()) {
+                toast.error("Please input your feedback.");
+                return;
+            }
+            const sanitizedFeedback = DOMPurify.sanitize(values.feedback).toString();
+            console.log("Sanitized Feedback:", sanitizedFeedback);
+
+            const feedbackData = {
+                feedback: sanitizedFeedback,
+                user_test_uuid: uuidString,
+            };
+
+            try {
+                // Call the submitFeedback mutation function here
+                await submitFeedback({ body: feedbackData }).unwrap();
+                // console.log('Feedback submitted successfully:', response);
+                toast.success("Your feedback has submitted successfully!", {
+                    icon: <span>🎉</span>,
+                    className: "Toastify__toast",
+                });
+                resetForm();
+            } catch (error) {
+                console.error('Error submitting feedback:', error);
+                toast.error("Failed to submit feedback. Please try again.");
+            }
+        },
+    });
+
     return (
         <div className='bg-bgPrimaryLight'>
             <div className='max-w-7xl mx-auto p-4 md:p-10 lg:p-12  grid grid-cols-1 lg:grid-cols-12 gap-4'>
@@ -40,19 +88,54 @@ export const Feedback = ({ title, desc, highlight, buttonTitle , placeholder}: p
                     </div>
 
 
-                    <Textarea className='bg-white border border-gray-200 pl-2 rounded-xl outline-none focus:border-gray-300 text-sm text-textprimary h-24 mb-4' placeholder={placeholder} />
+                    {/* <Textarea className='bg-white border border-gray-200 pl-2 rounded-xl outline-none focus:border-gray-300 text-sm text-textprimary h-24 mb-4' placeholder={placeholder} /> */}
+
+                    {/* <form onSubmit={formik.handleSubmit}>
+                        <Textarea
+                            name="feedback"
+                            value={formik.values.feedback}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                            className={`bg-white border ${formik.touched.feedback && formik.errors.feedback
+                                ? "border-red-500"
+                                : "border-gray-200"
+                                } pl-2 rounded-xl outline-none focus:border-gray-300 text-sm text-textprimary h-24 mb-4`}
+                            placeholder={placeholder}
+                        />
+                        {formik.touched.feedback && formik.errors.feedback && (
+                            <p className="text-red-500 text-sm mb-4">
+                                {formik.errors.feedback}
+                            </p>
+                        )}
 
 
+                        <div className=' flex justify-end'>
+                            <QuizButton title={buttonTitle} full={true} onClick={formik.handleSubmit} />
+                        </div>
+                    </form> */}
 
-                    <div className=' flex justify-end'>
-                        <QuizButton title={buttonTitle} full={true} />
-                    </div>
+                    <form onSubmit={formik.handleSubmit}>
+                        <Textarea
+                            name="feedback"
+                            value={formik.values.feedback}
+                            onChange={formik.handleChange}
+                            className={`bg-white border ${!formik.values.feedback.trim() ? "border-red-500" : "border-gray-200"
+                                } pl-2 rounded-xl outline-none focus:border-gray-300 text-sm text-textprimary h-24 mb-4`}
+                            placeholder={placeholder}
+                        />
+
+                        {!formik.values.feedback.trim() && (
+                            <p className="text-red-500 text-sm mb-4">
+                                Please input your feedback.
+                            </p>
+                        )}
+
+                        <div className='flex justify-end'>
+                            <QuizButton title={buttonTitle} full={true} onClick={formik.handleSubmit} />
+                        </div>
+                    </form>
 
                 </div>
-
-
-
-
 
             </div>
 

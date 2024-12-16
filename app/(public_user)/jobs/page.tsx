@@ -207,6 +207,17 @@ export default function Job() {
                 onClick={() => handleCardClick(job.id)}
               />
             ))}
+            {/* {jobListings.map((job) => (
+              <JobListingCard
+                key={job.id}
+                title={job.title}
+                desc={job.desc}
+                image={job.image}
+                time={job.time}
+                location={job.location}
+                onClick={() => handleCardClick(job.id)}
+              />
+            ))} */}
           </div>
           <div className='lg:col-span-4 '>
             <div className='lg:sticky lg:top-0'>

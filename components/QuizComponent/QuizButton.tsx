@@ -2,7 +2,7 @@ import React from 'react'
 
 type props = {
     title: string;
-    type?: 'leftIcon' | 'rightIcon' | 'none';
+    type?: 'leftIcon' | 'rightIcon' | 'none' ;
     rounded?: 'full' | 'xl';
     outline?: 'true' | 'false';
     icon?: React.ReactNode;
@@ -13,7 +13,7 @@ type props = {
 
 export const QuizButton = ({ title, type = 'none', rounded = 'xl', outline = 'false' , icon , full = false , color='#0BBB8A' , onClick}: props) => {
     return (
-        <button onClick={onClick}
+        <button type='button' onClick={onClick}
         className={`flex items-center justify-center gap-2 font-semibold
             ${rounded === 'xl' ? 'rounded-xl' : 'rounded-full'}
             ${outline === 'true' ? 'bg-transparent border-2 border-primary text-primary' : 'text-white'}
