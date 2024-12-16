@@ -269,7 +269,7 @@ export const resultApi = normPlovApi.injectEndpoints({
     fetchAssessmentDetails: builder.query({
       // Accept both uuid and resultType in the query
       query: ({ testUUID, resultType }: { testUUID: string; resultType: string }) => ({
-        url: `test/${testUUID}`, // Dynamic query parameter
+        url: `api/v1/test/${testUUID}`, // Dynamic query parameter
         method: 'GET',
       }),
       

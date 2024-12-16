@@ -1,11 +1,11 @@
 import { normPlovApi } from '@/redux/api'; // Import the main API instance
 
 const assessmentApiMap: Record<string, string> = {
-    skill: 'assessment/predict-skills',
-    personality: 'assessment/personality-assessment',
-    interest: 'assessment/process-interest-assessment',
-    value: 'assessment/value-assessment',
-    learningStyle: 'assessment/predict-learning-style',
+    skill: 'api/v1/assessment/predict-skills',
+    personality: 'api/v1/assessment/personality-assessment',
+    interest: 'api/v1/assessment/process-interest-assessment',
+    value: 'api/v1/assessment/value-assessment',
+    learningStyle: 'api/v1/assessment/predict-learning-style',
   };
   
 

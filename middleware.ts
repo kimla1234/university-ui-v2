@@ -31,26 +31,41 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
     console.log("Middleware triggered:", request.url);
 
-    // Retrieve the refresh token from cookies
+    // if (url.startsWith("/test")) {
+    //     if (!refreshToken) {
+    //       console.log("No refresh token found, redirecting to login...");
+    //       return NextResponse.redirect(new URL("/login", request.url));
+    //     }
+    //     console.log("Refresh token found, allowing access to /test/anything...");
+    //   }
+
+    //   // Allow the request if the token exists
+    //   return NextResponse.next();
+
     const refreshToken = request.cookies.get("normplov-refresh-token");
 
-    // Check if the user is accessing the /test route or its subroutes
-    const url = request.nextUrl.pathname;
 
-    // If the path starts with /test and there's no refresh token, redirect to login
-    if (url.startsWith("/test") || url.startsWith("/test-result")) {
-        if (!refreshToken) {
-            console.log("No refresh token found, redirecting to login...");
-            return NextResponse.redirect(new URL("/login", request.url));
-        }
-        console.log("Refresh token found, allowing access to /test routes.");
+    if (!refreshToken) {
+        console.log("No refresh token found, redirecting to login...");
+        return NextResponse.redirect(new URL("/login", request.url));
     }
 
-    // Allow the request to proceed for other cases
+    console.log("Refresh token found, allowing request...");
+    const url = request.nextUrl.pathname;
+
+    // if (url.startsWith("/test")) {
+    //     if (!refreshToken) {
+    //       console.log("No refresh token found, redirecting to login...");
+    //       return NextResponse.redirect(new URL("/login", request.url));
+    //     }
+    //     console.log("Refresh token found, allowing access to /test/anything...");
+    //   }
+
+    // Allow the request to proceed
     return NextResponse.next();
 }
 
 // Apply the middleware to /test and all its subroutes
 export const config = {
-    matcher: ["/test/:path*", "/test-result/:path*"],
+    matcher: ["/test/:path*","/test-result/:path*","/profile-about-user","/profile-quiz-history","/profile-draft"] // Example routes
 };

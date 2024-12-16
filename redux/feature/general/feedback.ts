@@ -5,7 +5,7 @@ export const feedbackApi = normPlovApi.injectEndpoints({
     SubmitFeedback: builder.mutation({
       query: ({ body }: {body: { feedback: string; user_test_uuid: string } }) => {
         return {
-          url: `feedback/create`,
+          url: `api/v1/feedback/create`,
           method: 'POST',
           body,
         };

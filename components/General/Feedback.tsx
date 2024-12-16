@@ -138,7 +138,6 @@ export const Feedback = ({ title, desc, highlight, buttonTitle, placeholder }: p
                 </div>
 
             </div>
-
         </div>
     )
 }
