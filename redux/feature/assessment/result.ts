@@ -269,12 +269,12 @@ export const resultApi = normPlovApi.injectEndpoints({
     fetchAssessmentDetails: builder.query({
       // Accept both uuid and resultType in the query
       query: ({ testUUID, resultType }: { testUUID: string; resultType: string }) => ({
-        url: `test/${testUUID}`, // Dynamic query parameter
+        url: `api/v1/test/${testUUID}`, // Dynamic query parameter
         method: 'GET',
       }),
       
       transformResponse: (response: any, meta, arg) => {
-        const responseData = response?.payload?.response;
+        const responseData = response?.payload[0];
        
         const resultType = arg.resultType
         console.log("data from api: ", responseData);
@@ -286,7 +286,7 @@ export const resultApi = normPlovApi.injectEndpoints({
 
         console.log("result typee: ", arg.resultType)
 
-        const parsedData = JSON.parse(responseData.response_data);
+        const parsedData = JSON.parse(responseData.user_response_data);
 
         console.log("parsed json: ", parsedData)
        

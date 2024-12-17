@@ -4,6 +4,7 @@ import Image, { StaticImageData } from 'next/image'
 import { ArrowRight } from "lucide-react";
 import placeholderImage from '@/public/Quiz/placeholder.jpg'
 import { QuizButton } from '../QuizComponent/QuizButton';
+import { useRouter } from 'next/navigation';
 
 type props = {
     title: string;
@@ -13,8 +14,12 @@ type props = {
 }
 
 export const JobBannerCard = ({ title, desc, image, buttonText }: props) => {
-
+    const router = useRouter();
     const [imgSrc, setImgSrc] = useState(image);
+
+    const handleOnClick = () => {
+        router.push('/test')
+    }
 
     return (
         <div className="w-full flex-none md:flex md:items-center md:flex-row lg:flex-col bg-white p-4 md:p-6 gap-4 rounded-xl">
@@ -37,16 +42,11 @@ export const JobBannerCard = ({ title, desc, image, buttonText }: props) => {
                     {desc}
                 </p>
 
-                <QuizButton title={buttonText ? buttonText : 'Start Quiz'} rounded='full' icon={<ArrowRight />} type='rightIcon' full={true}/>
+                <QuizButton title={buttonText ? buttonText : 'Start Quiz'} rounded='full' icon={<ArrowRight />} type='rightIcon' full={true} onClick={handleOnClick}/>
 
             </div>
 
            
-                
-            
-
-
-
         </div>
     )
 }

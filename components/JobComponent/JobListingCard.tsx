@@ -6,7 +6,7 @@ import placeholderImage from '@/public/Quiz/placeholder.jpg'
 type props = {
     title: string;
     desc: string;
-    image: StaticImageData | string;
+    image?: string;
     time?: string;
     location?: string;
     isActive?: boolean;
@@ -14,7 +14,9 @@ type props = {
 }
 
 export const JobListingCard = ({ title, desc, image, time, location, isActive, onClick }: props) => {
-    const [imgSrc, setImgSrc] = useState(image);
+    const [currentImgSrc, setImgSrc] = useState<string | StaticImageData>(
+        `${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${image}`
+      );
 
     // const handleCardClick = () => {
     //     router.push(`/jobs/${id}`); // Navigate to the detail page
@@ -33,7 +35,7 @@ export const JobListingCard = ({ title, desc, image, time, location, isActive, o
             {/* Image Section */}
             <div className="col-span-1 place-content-center place-items-center">
                 <Image
-                    src={imgSrc}
+                    src={currentImgSrc}
                     alt="Technique Illustration"
                     width={100}
                     height={100}
