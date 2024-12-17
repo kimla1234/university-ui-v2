@@ -550,7 +550,7 @@ import { Eye, Copy, Trash } from "lucide-react";
 import { useGetAllUserTestQuery, useDeleteUserTestMutation } from "@/redux/service/test";
 import Pagination from "./Pagination";
 import DeleteConfirmationModal from "./DeleteComfirmModal";
-
+import Image from "next/image";
 
 const TestList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -638,21 +638,51 @@ const TestList = () => {
       />
        )
     });
+{/* <div className="grid gap-4 grid-cols-1 mb-5">{testCards}</div> */}
 
+{/* Pagination */}
+{/* <div className="absolute right-0 bottom-0">
+  <Pagination
+    currentPage={currentPage}
+    totalPages={Math.ceil((data?.payload.metadata.total_items || 0) / itemsPerPage)}
+    setCurrentPage={setCurrentPage}
+    itemsPerPage={itemsPerPage}
+    setItemsPerPage={setItemsPerPage}
+  />
+</div> */}
   return (
-    <div className="relative h-screen">
-      <div className="grid gap-4 grid-cols-1 mb-5">{testCards}</div>
+   <div>
+     <div className="relative  w-full h-screen">
+     {data?.payload.items && data.payload.items.length >0 ?(
 
-      {/* Pagination */}
-      <div className="absolute right-0 bottom-0">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={Math.ceil((data?.payload.metadata.total_items || 0) / itemsPerPage)}
-          setCurrentPage={setCurrentPage}
-          itemsPerPage={itemsPerPage}
-          setItemsPerPage={setItemsPerPage}
-        />
-      </div>
+        <>
+        <div className="grid gap-4 grid-cols-1 mb-5">{testCards}</div>
+        {/* Pagination */}
+        <div className="absolute right-0 bottom-0">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil((data?.payload.metadata.total_items || 0) / itemsPerPage)}
+            setCurrentPage={setCurrentPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+          />
+        </div>
+        </>
+     ):(
+        // Fallback content when there are no tests
+        <div className="flex h-full mt-8 flex-col items-center text-center">
+          <Image
+            src="/auth/file1.png" // Replace with the correct image path
+            alt="No Tests Available"
+            width={500}
+            height={500}
+          />
+          <h2 className="text-3xl font-bold text-primary mt-4">គ្មានប្រវត្តិធ្វើតេស្ត</h2>
+          <p className="text-gray-600 mt-2">
+            សាកល្បងធ្វើតេស្តដើម្បីជម្រើសអាជីពរបស់អ្នកដោយចាប់ផ្តើមធ្វើតេស្តថ្មី។
+          </p>
+        </div>
+     )}
 
       {/* Delete Confirmation Modal */}
       <DeleteConfirmationModal
@@ -662,6 +692,7 @@ const TestList = () => {
         title={selectedTest?.title || ""}
       />
     </div>
+   </div>
   );
 };
 export default TestList;

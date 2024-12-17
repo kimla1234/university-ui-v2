@@ -18,6 +18,7 @@ import { QuizLinkAndChatContainer } from '../QuizLinkAndChatContainer';
 import { Feedback } from '../../General/Feedback';
 import { SkillResultComponent } from './ResultContentComponent/SkillResultComponent';
 import { LearningStyleResultComponent } from './ResultContentComponent/LearningStyleResultComponent';
+import { PersonalityResultComponent } from './ResultContentComponent/PersonalityResultComponent';
 
 type IntroKh = {
     title: string;
@@ -82,7 +83,7 @@ export default function ResultDynamicComponent() {
             case 'personality':
                 return (
                     <div>
-
+                        <PersonalityResultComponent/>
                     </div>
                 );
             case 'skill':
