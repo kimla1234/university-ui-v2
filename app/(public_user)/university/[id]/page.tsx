@@ -2,6 +2,16 @@
 import CardUniversityDetail from "@/components/UniversityComponent/CardUniversityDetail";
 import React, { useState, useEffect } from "react";
 
+
+  // Fallback major data with missing properties
+  const fallbackMajor = {
+    uuid: "no-id", 
+    name: "No majors available",
+    degree: "N/A",
+    fee_per_year: 0,
+    duration_years: 0,
+    description: "No description available",
+  };
 // Type definition for universities
 type UniversityType = {
   uuid: string;
@@ -21,7 +31,14 @@ type UniversityType = {
   description: string;
   mission: string;
   vision: string;
-  majors: string[];  // Handle empty array
+  majors: { // Define majors as an array of objects with appropriate properties
+    uuid: string;
+    name: string;
+    description: string;
+    fee_per_year: number;
+    duration_years: number;
+    degree: string;
+  }[];  // Handle empty array
 };
 
 export default function Page({ params }: { params: { id: string } }) { // Renamed to 'Page'
@@ -29,12 +46,15 @@ export default function Page({ params }: { params: { id: string } }) { // Rename
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const googleMapEmbedUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBs8q5cZDyFDPVqiN5JJ8loS_Qt2SiHsRk&q=11.588%2C104.930099";
+
+
   // Fetch universities on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}schools/${params.id}`
+          `${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}api/v1/schools/${params.id}`
         );
 
         if (!response.ok) {
@@ -98,7 +118,7 @@ export default function Page({ params }: { params: { id: string } }) { // Rename
             description={university.description}
             mission={university.mission}
             vision={university.vision}
-            majors={university.majors.length > 0 ? university.majors : ["No majors available"]}  // Handle empty majors array
+            majors={university.majors.length > 0 ? university.majors : [fallbackMajor]} 
           />
         ))
       ) : (

@@ -1,9 +1,27 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { MapPin, Globe, Phone, Mail } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { FaBook } from "react-icons/fa";
 import Image from "next/image";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { useGetUniversitiesQuery } from "@/redux/api";
+import {
+  setPage,
+  setProvince,
+  setSearch,
+  setSelectedUniversity,
+} from "@/redux/feature/filter/filterSlice";
+
+// Define the major type
+type MajorType = {
+  uuid: string;
+  name: string;
+  description: string;
+  fee_per_year: number;
+  duration_years: number;
+  degree: string; // Degree type (e.g., "ASSOCIATE", "BACHELOR", etc.)
+};
 
 // Type definition for universities
 type UniversityType = {
@@ -23,7 +41,7 @@ type UniversityType = {
   website: string;
   description: string;
   mission: string;
-  majors: string[];
+  majors: MajorType[];
   vision: string;
 };
 
@@ -89,30 +107,77 @@ export default function CardUniversityDetail({
   description,
   mission,
   vision,
+  majors,
   map,
 }: UniversityType) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const courses = [
-    { title: "គណិតវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-    { title: "រូបវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-    { title: "គីមីវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-    { title: "ជីវវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-    {
-      title: "ឌីជីថលវិទ្យា",
-      price: "$800 - $1200",
-      duration: "សិក្សា 4 ឆ្នាំ",
-    },
-    {
-      title: "បច្ចេកវិទ្យា",
-      price: "$800 - $1200",
-      duration: "សិក្សា 4 ឆ្នាំ",
-    },
-  ];
+  const dispatch = useAppDispatch();
+  const { search, province_uuid, page, selectedUniversity } = useAppSelector(
+    (state) => state.filter
+  );
 
-  const mapUrl = `https://www.google.com/maps/embed/v1/place?key=YOUR_API_KEY&q=${encodeURIComponent(
-    map
-  )}&zoom=17`;
 
+
+  const [selectedDegree, setSelectedDegree] = useState<string | null>(null); // Degree filter state
+  const [degreeOptions, setDegreeOptions] = useState<string[]>([]); // Degree options from API
+
+  // Fetch data (universities and courses)
+  const { data, error, isLoading } = useGetUniversitiesQuery({
+    search,
+    province_uuid,
+    type: selectedUniversity?.value || "",
+    page,
+  });
+  useEffect(() => {
+    if (data?.payload) {
+      // Ensure 'majors' is an array before calling .map()
+      const degrees = Array.from(
+        new Set(
+          data.payload.schools.flatMap((school: UniversityType) =>
+            // Safely check if school.majors exists before calling .map()
+            (school.majors || []).map((major) => major.degree)
+          )
+        )
+      ) as string[]; // Cast to string[] explicitly
+      setDegreeOptions(degrees); // Set degree options from API response
+    }
+  }, [data]);
+
+  // Filter courses based on degree selection
+  const filteredCourses =
+    data?.payload?.schools
+      ?.flatMap((school: UniversityType) => school.majors)
+      .filter(
+        (major: MajorType) => !selectedDegree || major.degree === selectedDegree
+      ) || [];
+
+  const handleNextPage = () => {
+    dispatch(setPage(page + 1));
+  };
+  const handlePreviousPage = () => {
+    dispatch(setPage(Math.max(page - 1, 1)));
+  };
+
+  const googleMapEmbedUrl =
+    "https://www.google.com/maps/embed/v1/place?key=AIzaSyBs8q5cZDyFDPVqiN5JJ8loS_Qt2SiHsRk&q=11.588%2C104.930099";
+
+    const courses = [
+      { title: "គណិតវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "រូបវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "គីមីវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "ជីវវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      {
+        title: "ឌីជីថលវិទ្យា",
+        price: "$800 - $1200",
+        duration: "សិក្សា 4 ឆ្នាំ",
+      },
+      {
+        title: "បច្ចេកវិទ្យា",
+        price: "$800 - $1200",
+        duration: "សិក្សា 4 ឆ្នាំ",
+      },
+    ];
+  
   return (
     <div className="min-h-screen bg-bglight">
       {/* Header */}
@@ -202,7 +267,7 @@ export default function CardUniversityDetail({
                     height="450"
                     loading="lazy"
                     allowFullScreen
-                    src={mapUrl}
+                    src={googleMapEmbedUrl}
                     className="w-full h-full"
                   ></iframe>
                 </div>
@@ -219,7 +284,7 @@ export default function CardUniversityDetail({
                   <div className="lg:text-[16px] md:text-sm text-[16px] text-primary ">
                     {website}
                   </div>
-                </div>
+                   </div>
                 <div className="flex items-center gap-2">
                   <Phone className="lg:w-5 lg:h-5 md:w-4 md:h-4 w-5 h-5 text-gray-400  lg:text-[16px] md:text-[16px] text-[16px]" />
                   <span className="lg:text-[16px] md:text-sm text-[16px] text-textprimary">
@@ -235,7 +300,6 @@ export default function CardUniversityDetail({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent>
               <h2 className="font-bold text-xl text-primary mb-4">បេសកកម្ម</h2>
@@ -256,8 +320,9 @@ export default function CardUniversityDetail({
           </Card>
         </div>
 
-        {/* Main Content */}
-        <div className="md:col-span-2">
+
+      {/* Main Content */}
+      <div className="md:col-span-2">
           <Card>
             <CardContent>
               <h2 className="font-bold text-xl text-textprimary mb-4">
@@ -289,7 +354,7 @@ export default function CardUniversityDetail({
                     isOpen ? "transform rotate-180 " : ""
                   }`}
                 />
-              </Button1>
+                </Button1>
 
               {isOpen && (
                 <div className="absolute z-10 mt-1 w-full  bg-green-50 shadow-lg rounded-xl">
@@ -312,8 +377,7 @@ export default function CardUniversityDetail({
               )}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
             {courses.map((course, index) => (
               <Card key={index}>
                 <CardContent>
@@ -343,8 +407,8 @@ export default function CardUniversityDetail({
               </Card>
             ))}
           </div>
-        </div>
-      </main>
+          </div>
+          </main>
     </div>
   );
 }
