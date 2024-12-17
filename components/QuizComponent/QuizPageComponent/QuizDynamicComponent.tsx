@@ -96,6 +96,12 @@ export default function QuizDynamicComponent() {
       return;
     }
 
+    // will remove once the api is fix
+    // if(testType === 'interest'){
+    //   router.push(`/test-result/interest/1`);
+    // }
+    
+
     const processedResponses = processResponsesFromModifiedJSON(userResponses, quizData.questions);
 
     

@@ -18,6 +18,7 @@ import { QuizLinkAndChatContainer } from '../QuizLinkAndChatContainer';
 import { Feedback } from '../../General/Feedback';
 import { SkillResultComponent } from './ResultContentComponent/SkillResultComponent';
 import { LearningStyleResultComponent } from './ResultContentComponent/LearningStyleResultComponent';
+import { InterestResultComponent } from './ResultContentComponent/InterestResultComponent';
 
 type IntroKh = {
     title: string;
@@ -91,8 +92,8 @@ export default function ResultDynamicComponent() {
                 );
             case 'interest':
                 return (
-                    // <InterestResultComponent/>
-                    <div></div>
+                    <InterestResultComponent/>
+                    
                 );
             case 'value':
                 return (

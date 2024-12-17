@@ -1,7 +1,7 @@
 'use client'
 import { JobListingCard } from '@/components/JobComponent/JobListingCard'
 import { JobMainContainer } from '@/components/JobComponent/JobMainContainer'
-import React from 'react'
+import React, { useState } from 'react'
 import job from '@/public/job/job.png'
 import { JobBannerCard } from '@/components/JobComponent/JobBannerCard'
 import {
@@ -14,114 +14,132 @@ import {
 import { QuizButton } from '@/components/QuizComponent/QuizButton'
 import { LayoutTemplate, MapPin, Clock } from "lucide-react";
 import { useRouter } from 'next/navigation'
+import { useFetchJobsQuery } from '@/redux/feature/jobs/jobs'
+import Pagination from '@/components/ProfileComponent/Pagination'
 
-const jobListings = [
-  {
-    id: '1',
-    title: 'iOS Developer',
-    desc: 'Anakut Digital Solutions',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Full-Time',
-    location: 'Remote',
-    category: 'Software Development',
-    jobDesc: 'We are seeking a highly skilled and experienced Mid-Senior iOS Developer to join our dynamic team. As a Mid-Senior iOS Developer, you will play a crucial role in designing, developing, and maintaining high-quality iOS applications.',
-    jobDescLabel: 'Job Description',
-    salary: '600+',
-  },
-  {
-    id: '2',
-    title: 'Backend Developer',
-    desc: 'Anakut Digital Solutions',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Part-Time',
-    location: 'Phnom Penh',
-    category: 'Backend Development',
-    jobDesc: 'Join our innovative team as a Backend Developer and play a pivotal role in developing robust and scalable server-side applications.',
-    jobDescLabel: 'Job Description',
-    salary: '500+',
-  },
-  {
-    id: '3',
-    title: 'Frontend Developer',
-    desc: 'Cambodia Tech Ventures',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Full-Time',
-    location: 'Phnom Penh',
-    category: 'Web Development',
-    jobDesc: 'We are looking for a passionate Frontend Developer to build innovative and interactive user interfaces.',
-    jobDescLabel: 'Job Description',
-    salary: '700+',
-  },
-  {
-    id: '4',
-    title: 'Graphic Designer',
-    desc: 'Creative Agency',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Contract',
-    location: 'Siem Reap',
-    category: 'Design',
-    jobDesc: 'Collaborate with clients to create visually appealing designs and branding.',
-    jobDescLabel: 'Job Description',
-    salary: '400+',
-  },
-  {
-    id: '5',
-    title: 'Data Analyst',
-    desc: 'Tech Analytics Co.',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Full-Time',
-    location: 'Remote',
-    category: 'Data Science',
-    jobDesc: 'Analyze and interpret complex data sets to inform business decisions.',
-    jobDescLabel: 'Job Description',
-    salary: '800+',
-  },
-  {
-    id: '6',
-    title: 'Digital Marketing Specialist',
-    desc: 'Global Marketing Ltd.',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Part-Time',
-    location: 'Phnom Penh',
-    category: 'Marketing',
-    jobDesc: 'Develop and execute digital marketing strategies to enhance brand presence.',
-    jobDescLabel: 'Job Description',
-    salary: '600+',
-  },
-  {
-    id: '7',
-    title: 'Product Manager',
-    desc: 'Tech Innovations',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Full-Time',
-    location: 'Phnom Penh',
-    category: 'Management',
-    jobDesc: 'Oversee product lifecycle and collaborate with cross-functional teams to deliver high-quality solutions.',
-    jobDescLabel: 'Job Description',
-    salary: '1200+',
-  },
-  {
-    id: '8',
-    title: 'AI Researcher',
-    desc: 'Future AI Labs',
-    image: '/job/khmerEnterpriseLogo.png',
-    time: 'Full-Time',
-    location: 'Remote',
-    category: 'Artificial Intelligence',
-    jobDesc: 'Conduct cutting-edge research in AI and machine learning technologies.',
-    jobDescLabel: 'Job Description',
-    salary: '1500+',
-  },
-];
+// const jobListings = [
+//   {
+//     id: '1',
+//     title: 'iOS Developer',
+//     desc: 'Anakut Digital Solutions',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Full-Time',
+//     location: 'Remote',
+//     category: 'Software Development',
+//     jobDesc: 'We are seeking a highly skilled and experienced Mid-Senior iOS Developer to join our dynamic team. As a Mid-Senior iOS Developer, you will play a crucial role in designing, developing, and maintaining high-quality iOS applications.',
+//     jobDescLabel: 'Job Description',
+//     salary: '600+',
+//   },
+//   {
+//     id: '2',
+//     title: 'Backend Developer',
+//     desc: 'Anakut Digital Solutions',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Part-Time',
+//     location: 'Phnom Penh',
+//     category: 'Backend Development',
+//     jobDesc: 'Join our innovative team as a Backend Developer and play a pivotal role in developing robust and scalable server-side applications.',
+//     jobDescLabel: 'Job Description',
+//     salary: '500+',
+//   },
+//   {
+//     id: '3',
+//     title: 'Frontend Developer',
+//     desc: 'Cambodia Tech Ventures',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Full-Time',
+//     location: 'Phnom Penh',
+//     category: 'Web Development',
+//     jobDesc: 'We are looking for a passionate Frontend Developer to build innovative and interactive user interfaces.',
+//     jobDescLabel: 'Job Description',
+//     salary: '700+',
+//   },
+//   {
+//     id: '4',
+//     title: 'Graphic Designer',
+//     desc: 'Creative Agency',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Contract',
+//     location: 'Siem Reap',
+//     category: 'Design',
+//     jobDesc: 'Collaborate with clients to create visually appealing designs and branding.',
+//     jobDescLabel: 'Job Description',
+//     salary: '400+',
+//   },
+//   {
+//     id: '5',
+//     title: 'Data Analyst',
+//     desc: 'Tech Analytics Co.',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Full-Time',
+//     location: 'Remote',
+//     category: 'Data Science',
+//     jobDesc: 'Analyze and interpret complex data sets to inform business decisions.',
+//     jobDescLabel: 'Job Description',
+//     salary: '800+',
+//   },
+//   {
+//     id: '6',
+//     title: 'Digital Marketing Specialist',
+//     desc: 'Global Marketing Ltd.',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Part-Time',
+//     location: 'Phnom Penh',
+//     category: 'Marketing',
+//     jobDesc: 'Develop and execute digital marketing strategies to enhance brand presence.',
+//     jobDescLabel: 'Job Description',
+//     salary: '600+',
+//   },
+//   {
+//     id: '7',
+//     title: 'Product Manager',
+//     desc: 'Tech Innovations',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Full-Time',
+//     location: 'Phnom Penh',
+//     category: 'Management',
+//     jobDesc: 'Oversee product lifecycle and collaborate with cross-functional teams to deliver high-quality solutions.',
+//     jobDescLabel: 'Job Description',
+//     salary: '1200+',
+//   },
+//   {
+//     id: '8',
+//     title: 'AI Researcher',
+//     desc: 'Future AI Labs',
+//     image: '/job/khmerEnterpriseLogo.png',
+//     time: 'Full-Time',
+//     location: 'Remote',
+//     category: 'Artificial Intelligence',
+//     jobDesc: 'Conduct cutting-edge research in AI and machine learning technologies.',
+//     jobDescLabel: 'Job Description',
+//     salary: '1500+',
+//   },
+// ];
 
 export default function Job() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5)
 
   const router = useRouter();
 
+  const { data} = useFetchJobsQuery({ page: currentPage, page_size: itemsPerPage });
+
+  if (!data) {
+    return <p>Loading...</p>;
+  }
+
+  console.log("data: ", data)
+
+  const jobs = data?.payload?.items || []
+
   const handleCardClick = (id: string) => {
     router.push(`/jobs/${id}`);
-    
+
   };
+
+  
+  const totalPages = data?.payload?.metadata?.total_pages;
+  
 
   return (
     <div className='w-full bg-bgPrimaryLight'>
@@ -143,9 +161,9 @@ export default function Job() {
 
             </SelectTrigger>
             <SelectContent className='bg-white text-textprimary'>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Light</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Dark</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="system">System</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Networking</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Hotel & Service</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="system">Programming</SelectItem>
             </SelectContent>
           </Select>
 
@@ -159,9 +177,9 @@ export default function Job() {
 
             </SelectTrigger>
             <SelectContent className='bg-white text-textprimary'>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Light</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Dark</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="system">System</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Phnom Penh</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Sihanouk Ville</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="system">Kompot</SelectItem>
             </SelectContent>
           </Select>
 
@@ -176,9 +194,9 @@ export default function Job() {
 
             </SelectTrigger>
             <SelectContent className='bg-white text-textprimary'>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Light</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Dark</SelectItem>
-              <SelectItem className='focus:bg-bgPrimaryLight' value="system">System</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="light">Full Time</SelectItem>
+              <SelectItem className='focus:bg-bgPrimaryLight' value="dark">Part Time</SelectItem>
+            
             </SelectContent>
           </Select>
 
@@ -196,17 +214,27 @@ export default function Job() {
 
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-4 mb-4'>
           <div className='lg:col-span-8 space-y-4'>
-            {jobListings.map((job) => (
+            {jobs.map((job) => (
               <JobListingCard
-                key={job.id}
+                key={job.uuid}
                 title={job.title}
-                desc={job.desc}
-                image={job.image}
-                time={job.time}
+                desc={job.company_name}
+                image={job.logo}
+                time={job.job_type}
                 location={job.location}
-                onClick={() => handleCardClick(job.id)}
+                onClick={() => handleCardClick(job.uuid)}
               />
             ))}
+             <div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                setCurrentPage={setCurrentPage}
+                itemsPerPage={itemsPerPage}
+                setItemsPerPage={setItemsPerPage}
+              />
+            </div>
+           
             {/* {jobListings.map((job) => (
               <JobListingCard
                 key={job.id}
@@ -226,6 +254,7 @@ export default function Job() {
             </div>
 
           </div>
+          
         </div>
 
       </div>

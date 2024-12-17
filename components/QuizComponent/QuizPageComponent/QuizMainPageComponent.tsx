@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import interest from '@/public/Quiz/optQuiz/Interest.png'
 import learning from '@/public/Quiz/optQuiz/learning style.png'
 import skill from '@/public/Quiz/optQuiz/Skills.png'
-import allTest from '@/public/Quiz/optQuiz/allTest.png'
+// import allTest from '@/public/Quiz/optQuiz/allTest.png'
 import value from '@/public/Quiz/optQuiz/value.png'
 import personality from '@/public/Quiz/optQuiz/Personality.png'
 
@@ -18,7 +18,6 @@ import personalityJson from '@/app/(user)/json/personalityKh.json'
 import interestJson from '@/app/(user)/json/interestKh.json'
 import skillJson from '@/app/(user)/json/skillKh.json'
 import valueJson from '@/app/(user)/json/valueKh.json'
-import allTestJson from '@/app/(user)/json/allTest.json'
 import learningStyleJson from '@/app/(user)/json/learningStyleKh.json'
 
 
@@ -43,7 +42,7 @@ export default function QuizMainPageComponent() {
 
     const { learningStyleMainKh } = learningStyleJson
 
-    const { allMainKh } = allTestJson
+    // const { allMainKh } = allTestJson
 
     const quizOptions = [
         { title: personalityMainKh.title, desc: personalityMainKh.desc, image: personality, buttonText: personalityMainKh.buttonText, route: personalityMainKh.route },
@@ -51,7 +50,7 @@ export default function QuizMainPageComponent() {
         { title: skillMainKh.title, desc: skillMainKh.desc, image: skill, buttonText: skillMainKh.buttonText, route: skillMainKh.route },
         { title: learningStyleMainKh.title, desc: learningStyleMainKh.desc, image: learning, buttonText: learningStyleMainKh.buttonText, route: learningStyleMainKh.route },
         { title: valueMainKh.title, desc: valueMainKh.desc, image: value, buttonText: valueMainKh.buttonText, route: valueMainKh.route },
-        { title: allMainKh.title, desc: allMainKh.desc, image: allTest, buttonText: allMainKh.buttonText, route: allMainKh.route }
+        // { title: allMainKh.title, desc: allMainKh.desc, image: allTest, buttonText: allMainKh.buttonText, route: allMainKh.route }
     ];
 
 

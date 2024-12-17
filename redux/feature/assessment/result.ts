@@ -274,7 +274,7 @@ export const resultApi = normPlovApi.injectEndpoints({
       }),
       
       transformResponse: (response: any, meta, arg) => {
-        const responseData = response?.payload?.response;
+        const responseData = response?.payload[0];
        
         const resultType = arg.resultType
         console.log("data from api: ", responseData);
@@ -286,7 +286,7 @@ export const resultApi = normPlovApi.injectEndpoints({
 
         console.log("result typee: ", arg.resultType)
 
-        const parsedData = JSON.parse(responseData.response_data);
+        const parsedData = JSON.parse(responseData.user_response_data);
 
         console.log("parsed json: ", parsedData)
        
