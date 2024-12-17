@@ -110,10 +110,13 @@ export default function CardUniversityDetail({
   majors,
   map,
 }: UniversityType) {
+  const [isOpen, setIsOpen] = React.useState(false);
   const dispatch = useAppDispatch();
   const { search, province_uuid, page, selectedUniversity } = useAppSelector(
     (state) => state.filter
   );
+
+
 
   const [selectedDegree, setSelectedDegree] = useState<string | null>(null); // Degree filter state
   const [degreeOptions, setDegreeOptions] = useState<string[]>([]); // Degree options from API
@@ -158,6 +161,23 @@ export default function CardUniversityDetail({
   const googleMapEmbedUrl =
     "https://www.google.com/maps/embed/v1/place?key=AIzaSyBs8q5cZDyFDPVqiN5JJ8loS_Qt2SiHsRk&q=11.588%2C104.930099";
 
+    const courses = [
+      { title: "គណិតវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "រូបវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "គីមីវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      { title: "ជីវវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
+      {
+        title: "ឌីជីថលវិទ្យា",
+        price: "$800 - $1200",
+        duration: "សិក្សា 4 ឆ្នាំ",
+      },
+      {
+        title: "បច្ចេកវិទ្យា",
+        price: "$800 - $1200",
+        duration: "សិក្សា 4 ឆ្នាំ",
+      },
+    ];
+  
   return (
     <div className="min-h-screen bg-bglight">
       {/* Header */}
@@ -243,15 +263,12 @@ export default function CardUniversityDetail({
                 {/* Map placeholder */}
                 <div className="w-full h-full flex items-center justify-center text-gray-400">
                   <iframe
-                    src={googleMapEmbedUrl}
-                    width="100%"
-                    height="100%"
-                    frameBorder={0}
-                    style={{ border: 0 }}
+                    width="600"
+                    height="450"
+                    loading="lazy"
                     allowFullScreen
-                    aria-hidden="false"
-                    tabIndex={0}
-                    title="Google Map"
+                    src={googleMapEmbedUrl}
+                    className="w-full h-full"
                   ></iframe>
                 </div>
               </div>
@@ -267,7 +284,7 @@ export default function CardUniversityDetail({
                   <div className="lg:text-[16px] md:text-sm text-[16px] text-primary ">
                     {website}
                   </div>
-                </div>
+                   </div>
                 <div className="flex items-center gap-2">
                   <Phone className="lg:w-5 lg:h-5 md:w-4 md:h-4 w-5 h-5 text-gray-400  lg:text-[16px] md:text-[16px] text-[16px]" />
                   <span className="lg:text-[16px] md:text-sm text-[16px] text-textprimary">
@@ -283,7 +300,6 @@ export default function CardUniversityDetail({
               </div>
             </CardContent>
           </Card>
-
           <Card>
             <CardContent>
               <h2 className="font-bold text-xl text-primary mb-4">បេសកកម្ម</h2>
@@ -304,8 +320,9 @@ export default function CardUniversityDetail({
           </Card>
         </div>
 
-        {/* Main Content */}
-        <div className="md:col-span-2">
+
+      {/* Main Content */}
+      <div className="md:col-span-2">
           <Card>
             <CardContent>
               <h2 className="font-bold text-xl text-textprimary mb-4">
@@ -327,61 +344,71 @@ export default function CardUniversityDetail({
             </div>
 
             <div className="relative ">
-              <select
-                onChange={(e) => setSelectedDegree(e.target.value)}
-                value={selectedDegree || ""}
+              <Button1
+                onClick={() => setIsOpen(!isOpen)}
+                className="w-full border rounded-xl"
               >
-                <option value="">All Degrees</option>
-                {degreeOptions.map((degree, index) => (
-                  <option key={index} value={degree}>
-                    {degree}
-                  </option>
-                ))}
-              </select>
+                <span>មហាវិទ្យាល័យវិទ្យាសាស្ត្រ</span>
+                <ChevronDown
+                  className={`ml-2 h-4 w-4 transition-transform ${
+                    isOpen ? "transform rotate-180 " : ""
+                  }`}
+                />
+                </Button1>
+
+              {isOpen && (
+                <div className="absolute z-10 mt-1 w-full  bg-green-50 shadow-lg rounded-xl">
+                  <div className="py-1">
+                    {[
+                      "មហាវិទ្យាល័យវិទ្យាសាស្ត្រ",
+                      "មហាវិទ្យាល័យវិស្វកម្ម",
+                      "មហាវិទ្យាល័យវិទ្យាអប់រំ",
+                      "មហាវិទ្យាល័យវិទ្យាភាសា",
+                    ].map((item, index) => (
+                      <button
+                        key={index}
+                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                      >
+                        {item}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
-            {filteredCourses.length > 0 ? (
-              filteredCourses.map((course: any, index: number) => (
-                <div key={index}>
-                  <Card>
-                    <CardContent>
-                      <div className="flex gap-4 items-center w-full">
-                        <FaBook className="lg:w-12 lg:h-8 md:w-6 md:h-10 w-10 h-10 text-primary lg:block md:hidden hidden" />
-                        <div className="w-full">
-                          <div className="flex space-x-4">
-                            {/* Check if 'course' and 'course.name' exist */}
-                            <h3 className="text-lg mb-2 text-textprimary">
-                              {course && course.name
-                                ? course.name
-                                : "No course name available"}
-                            </h3>
-                          </div>
-                          <div className="flex justify-between">
-                            <p className="text-md text-gray-600 mb-1">
-                              {course?.fee_per_year
-                                ? `$${course.fee_per_year}`
-                                : "No fee available"}
-                            </p>
-                            <p className="text-md text-gray-600 mb-1">
-                              {course?.duration_years
-                                ? `${course.duration_years} years`
-                                : "No duration available"}
-                            </p>
-                          </div>
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
+            {courses.map((course, index) => (
+              <Card key={index}>
+                <CardContent>
+                  <div className="flex gap-4 items-center w-full">
+                    <FaBook className="lg:w-12 lg:h-8 md:w-6 md:h-10 w-10 h-10 text-primary lg:block md:hidden hidden " />
+                    <div className=" w-full">
+                      <div className="flex space-x-4">
+                        <h3 className=" text-lg mb-2 text-textprimary">
+                          {course.title}
+                        </h3>
+                      </div>
+                      <div className="flex  justify-between  ">
+                        <div>
+                          <p className="text-md text-gray-600 mb-1">
+                            {course.price}
+                          </p>
+                        </div>
+                        <div className="flex justify-center items-center space-x-2">
+                          <p className="text-md text-gray-600 flex  items-center gap-1">
+                            {course.duration}
+                          </p>
                         </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))
-            ) : (
-              <div>No courses found for this degree</div>
-            )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
-        </div>
-      </main>
+          </div>
+          </main>
     </div>
   );
 }

@@ -184,7 +184,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/lyminh.png"
+                    src="/assets/roza.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
@@ -321,7 +321,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/lyminh.png"
+                    src="/assets/chhumhy.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
@@ -458,7 +458,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/lyminh.png"
+                    src="/assets/seamey.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
@@ -595,7 +595,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/lyminh.png"
+                    src="/assets/sovanarith.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
@@ -732,7 +732,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/lyminh.png"
+                    src="/assets/kimla.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
