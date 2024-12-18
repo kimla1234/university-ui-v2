@@ -416,6 +416,7 @@ const SideBarProfileComponent = () => {
     : null;
  console.log("avavatar url "+avatarUrl)
   const username = userData?.username || "User";
+  console.log("username "+username)
   const email = userData?.email;
 
   const handleSubmit = async (values: ValueTypes) => {

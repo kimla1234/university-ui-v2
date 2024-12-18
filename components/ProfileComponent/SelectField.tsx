@@ -18,10 +18,10 @@ type SelectDemoProps = {
 export function SelectDemo({ selectedGender, onGenderChange }: SelectDemoProps) {
   return (
     <Select
-      value={selectedGender || undefined} // Ensure null is converted to undefined
+      value={selectedGender || undefined} // Pass undefined when no gender is selected
       onValueChange={onGenderChange}
     >
-      <SelectTrigger className="w-full h-12 mt-1 bg-white border-slate-200 text-slate-400 text-md">
+      <SelectTrigger className="w-full h-12 mt-1 bg-white border-slate-200 text-textprimary text-md">
         <SelectValue placeholder="ជ្រើសរើសភេទ" />
       </SelectTrigger>
       <SelectContent className="text-slate-600">

@@ -19,6 +19,7 @@ import { Feedback } from '../../General/Feedback';
 import { SkillResultComponent } from './ResultContentComponent/SkillResultComponent';
 import { LearningStyleResultComponent } from './ResultContentComponent/LearningStyleResultComponent';
 import { PersonalityResultComponent } from './ResultContentComponent/PersonalityResultComponent';
+import { ValueResultComponent } from './ResultContentComponent/ValueResultComponent';
 
 type IntroKh = {
     title: string;
@@ -98,7 +99,7 @@ export default function ResultDynamicComponent() {
             case 'value':
                 return (
                     <div>
-
+                       <ValueResultComponent/> 
                     </div>
                 );
             case 'learningStyle':

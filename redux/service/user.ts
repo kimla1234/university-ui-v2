@@ -55,7 +55,7 @@ export const userApi = normPlovApi.injectEndpoints({
             method:"PATCH",
             body:user
           }),
-          invalidatesTags:["userProfile"]
+          // invalidatesTags:["userProfile"]
         }),
          // Post image by uuid user
          postImage: builder.mutation<UserResponse, { uuid: string; avatar_url: File }>({
