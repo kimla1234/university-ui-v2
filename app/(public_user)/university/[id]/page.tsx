@@ -25,7 +25,8 @@ type UniversityType = {
   phone: string;
   lowest_price: number;
   highest_price: number;
-  map: string;
+  latitude: number;
+  longitude: number;
   email: string;
   website: string;
   description: string;
@@ -39,6 +40,7 @@ type UniversityType = {
     duration_years: number;
     degree: string;
   }[];  // Handle empty array
+  faculties: { uuid: string; name: string; description: string }[]; // Handle empty array
 };
 
 export default function Page({ params }: { params: { id: string } }) { // Renamed to 'Page'
@@ -46,7 +48,6 @@ export default function Page({ params }: { params: { id: string } }) { // Rename
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const googleMapEmbedUrl = "https://www.google.com/maps/embed/v1/place?key=AIzaSyBs8q5cZDyFDPVqiN5JJ8loS_Qt2SiHsRk&q=11.588%2C104.930099";
 
 
   // Fetch universities on component mount
@@ -112,13 +113,15 @@ export default function Page({ params }: { params: { id: string } }) { // Rename
             phone={university.phone}
             lowest_price={university.lowest_price}
             highest_price={university.highest_price}
-            map={university.map || "No map available"}
+            latitude={university.latitude}
+            longitude={university.longitude}  // Added latitude and longitude properties for map rendering
             email={university.email}
             website={university.website}
             description={university.description}
             mission={university.mission}
             vision={university.vision}
             majors={university.majors.length > 0 ? university.majors : [fallbackMajor]} 
+            faculties={university.faculties}
           />
         ))
       ) : (

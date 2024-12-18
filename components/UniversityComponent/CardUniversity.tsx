@@ -64,14 +64,7 @@ export default function CardUniversity({
                 {popular_major}
               </span>
             </div>
-            <div className=" items-center hidden md:flex lg:flex">
-              <div className="text-sm md:text-lg lg:text-lg text-primary ">
-                ព័ត៌មានផ្សេងៗ
-              </div>
-              <div>
-                <BiRightArrowAlt className="text-sm md:text-2xl lg:text-2xl ml-2 text-primary" />
-              </div>
-            </div>
+            
           </div>
         </div>
       </div>

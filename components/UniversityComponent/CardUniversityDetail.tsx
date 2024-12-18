@@ -21,6 +21,7 @@ type MajorType = {
   fee_per_year: number;
   duration_years: number;
   degree: string; // Degree type (e.g., "ASSOCIATE", "BACHELOR", etc.)
+  faculty?: string; // Make the faculty field optional
 };
 
 // Type definition for universities
@@ -36,13 +37,15 @@ type UniversityType = {
   phone: string;
   lowest_price: number;
   highest_price: number;
-  map: string;
+  latitude: number;
+  longitude: number;
   email: string;
   website: string;
   description: string;
   mission: string;
   majors: MajorType[];
   vision: string;
+  faculties: { uuid: string; name: string; description: string }[]; // Faculties
 };
 
 // Button component
@@ -108,58 +111,53 @@ export default function CardUniversityDetail({
   mission,
   vision,
   majors,
-  map,
+  latitude,
+  longitude,
+  faculties
 }: UniversityType) {
+  const [selectedDegree, setSelectedDegree] = useState<string>("BACHELOR"); // Default degree filter
+  const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null); // Faculty filter
+  const [filteredMajors, setFilteredMajors] = useState<MajorType[]>(majors);
+  const [googleMapEmbedUrl, setGoogleMapEmbedUrl] = useState<string>("");
   const [isOpen, setIsOpen] = React.useState(false);
-  const dispatch = useAppDispatch();
   const { search, province_uuid, page, selectedUniversity } = useAppSelector(
     (state) => state.filter
   );
 
 
 
-  const [selectedDegree, setSelectedDegree] = useState<string | null>(null); // Degree filter state
-  const [degreeOptions, setDegreeOptions] = useState<string[]>([]); // Degree options from API
-
   // Fetch data (universities and courses)
-  const { data, error, isLoading } = useGetUniversitiesQuery({
-    search,
-    province_uuid,
-    type: selectedUniversity?.value || "",
-    page,
-  });
   useEffect(() => {
-    if (data?.payload) {
-      // Ensure 'majors' is an array before calling .map()
-      const degrees = Array.from(
-        new Set(
-          data.payload.schools.flatMap((school: UniversityType) =>
-            // Safely check if school.majors exists before calling .map()
-            (school.majors || []).map((major) => major.degree)
-          )
-        )
-      ) as string[]; // Cast to string[] explicitly
-      setDegreeOptions(degrees); // Set degree options from API response
+    // Filter majors based on selected degree and faculty
+    let filtered = majors;
+
+    if (selectedDegree) {
+      filtered = filtered.filter((major) => major.degree === selectedDegree);
     }
-  }, [data]);
 
-  // Filter courses based on degree selection
-  const filteredCourses =
-    data?.payload?.schools
-      ?.flatMap((school: UniversityType) => school.majors)
-      .filter(
-        (major: MajorType) => !selectedDegree || major.degree === selectedDegree
-      ) || [];
+    if (selectedFaculty) {
+      filtered = filtered.filter((major) => major.faculty === selectedFaculty);
+    }
 
-  const handleNextPage = () => {
-    dispatch(setPage(page + 1));
-  };
-  const handlePreviousPage = () => {
-    dispatch(setPage(Math.max(page - 1, 1)));
+    setFilteredMajors(filtered); // Update filtered majors
+  }, [selectedDegree, selectedFaculty, majors]); // Re-filter when degree or faculty changes
+
+  // Handle degree change
+  const handleDegreeChange = (degree: string) => {
+    setSelectedDegree(degree);
   };
 
-  const googleMapEmbedUrl =
-    "https://www.google.com/maps/embed/v1/place?key=AIzaSyBs8q5cZDyFDPVqiN5JJ8loS_Qt2SiHsRk&q=11.588%2C104.930099";
+  // Handle faculty change
+  const handleFacultyChange = (faculty: string) => {
+    setSelectedFaculty(faculty);
+  };
+
+
+  useEffect(() => {
+    // Generate the Google Maps Embed URL using latitude and longitude
+    const mapUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&q=${latitude},${longitude}`;
+    setGoogleMapEmbedUrl(mapUrl); // Set the map URL dynamically based on coordinates
+  }, [latitude, longitude]);
 
     const courses = [
       { title: "គណិតវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
@@ -259,17 +257,19 @@ export default function CardUniversityDetail({
               <h2 className="font-bold text-textprimary text-xl mb-4">
                 ទីតាំងយើងខ្ញុំ
               </h2>
-              <div className="aspect-[4/3] bg-gray-100 rounded-lg mb-4">
+              <div className="aspect-[4/3] rounded-xl bg-gray-100 mb-4">
                 {/* Map placeholder */}
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <iframe
-                    width="600"
-                    height="450"
-                    loading="lazy"
-                    allowFullScreen
-                    src={googleMapEmbedUrl}
-                    className="w-full h-full"
-                  ></iframe>
+                <div className="w-full h-full  flex items-center justify-center text-gray-400">
+                {googleMapEmbedUrl && (
+                    <iframe
+                      src={googleMapEmbedUrl}
+                      width="600"
+                      height="450"
+                      loading="lazy"
+                      allowFullScreen
+                      className="w-full h-full "
+                    ></iframe>
+                  )}
                 </div>
               </div>
               <div className="space-y-3 text-sm">
@@ -344,68 +344,43 @@ export default function CardUniversityDetail({
             </div>
 
             <div className="relative ">
-              <Button1
-                onClick={() => setIsOpen(!isOpen)}
-                className="w-full border rounded-xl"
-              >
-                <span>មហាវិទ្យាល័យវិទ្យាសាស្ត្រ</span>
-                <ChevronDown
-                  className={`ml-2 h-4 w-4 transition-transform ${
-                    isOpen ? "transform rotate-180 " : ""
-                  }`}
-                />
-                </Button1>
+            <button
+                  onClick={() => handleDegreeChange("BACHELOR")}
+                  className={`block px-4 py-2 w-full text-left ${selectedDegree === "BACHELOR" ? "bg-green-100" : ""}`}
+                >
+                  BACHELOR
+                </button>
+                <button
+                  onClick={() => handleDegreeChange("ASSOCIATE")}
+                  className={`block px-4 py-2 w-full text-left ${selectedDegree === "ASSOCIATE" ? "bg-green-100" : ""}`}
+                >
+                  ASSOCIATE
+                </button>
 
-              {isOpen && (
-                <div className="absolute z-10 mt-1 w-full  bg-green-50 shadow-lg rounded-xl">
-                  <div className="py-1">
-                    {[
-                      "មហាវិទ្យាល័យវិទ្យាសាស្ត្រ",
-                      "មហាវិទ្យាល័យវិស្វកម្ម",
-                      "មហាវិទ្យាល័យវិទ្យាអប់រំ",
-                      "មហាវិទ្យាល័យវិទ្យាភាសា",
-                    ].map((item, index) => (
-                      <button
-                        key={index}
-                        className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                      >
-                        {item}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
+                
             </div>
           </div>
-           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
-            {courses.map((course, index) => (
-              <Card key={index}>
-                <CardContent>
-                  <div className="flex gap-4 items-center w-full">
-                    <FaBook className="lg:w-12 lg:h-8 md:w-6 md:h-10 w-10 h-10 text-primary lg:block md:hidden hidden " />
-                    <div className=" w-full">
-                      <div className="flex space-x-4">
-                        <h3 className=" text-lg mb-2 text-textprimary">
-                          {course.title}
-                        </h3>
-                      </div>
-                      <div className="flex  justify-between  ">
-                        <div>
-                          <p className="text-md text-gray-600 mb-1">
-                            {course.price}
-                          </p>
-                        </div>
-                        <div className="flex justify-center items-center space-x-2">
-                          <p className="text-md text-gray-600 flex  items-center gap-1">
-                            {course.duration}
-                          </p>
-                        </div>
-                      </div>
+           {/* Main Content - Courses */}
+        <div className="md:col-span-2">
+          <Card>
+            <CardContent>
+              <h2 className="font-bold text-xl text-textprimary mb-4">Courses</h2>
+              {filteredMajors.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
+                  {filteredMajors.map((course, index) => (
+                    <div key={index} className="bg-white rounded-xl shadow-sm p-4">
+                      <h3 className="text-lg font-semibold text-textprimary mb-2">{course.name}</h3>
+                      <p className="text-md text-gray-600 mb-1">{course.description}</p>
+                      <p className="text-md text-gray-600 mb-1">Fee per year: ${course.fee_per_year}</p>
+                      <p className="text-md text-gray-600">Duration: {course.duration_years} years</p>
                     </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  ))}
+                </div>
+              ) : (
+                <p>No courses found for selected degree and faculty.</p>
+              )}
+            </CardContent>
+          </Card>
           </div>
           </div>
           </main>
