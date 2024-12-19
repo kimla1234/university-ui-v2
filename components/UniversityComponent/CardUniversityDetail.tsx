@@ -5,13 +5,8 @@ import { ChevronDown } from "lucide-react";
 import { FaBook } from "react-icons/fa";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { useGetUniversitiesQuery } from "@/redux/api";
-import {
-  setPage,
-  setProvince,
-  setSearch,
-  setSelectedUniversity,
-} from "@/redux/feature/filter/filterSlice";
+import { setSelectedDegree } from "@/redux/feature/filter/filterSlice";
+import Select from "react-select";
 
 // Define the major type
 type MajorType = {
@@ -23,6 +18,14 @@ type MajorType = {
   degree: string; // Degree type (e.g., "ASSOCIATE", "BACHELOR", etc.)
   faculty?: string; // Make the faculty field optional
 };
+
+// Sample data for available degrees and faculties (this would ideally come from your API)
+const availableDegrees = ["BACHELOR", "MASTER", "PHD"];
+const availableFaculties = [
+  { value: "Engineering", label: "Engineering" },
+  { value: "Business", label: "Business" },
+  { value: "Arts", label: "Arts" },
+];
 
 // Type definition for universities
 type UniversityType = {
@@ -45,7 +48,12 @@ type UniversityType = {
   mission: string;
   majors: MajorType[];
   vision: string;
-  faculties: { uuid: string; name: string; description: string }[]; // Faculties
+  faculties: {
+    uuid: string;
+    name: string;
+    description: string;
+    majors: MajorType[];
+  }[]; // Faculties with majors
 };
 
 // Button component
@@ -113,45 +121,40 @@ export default function CardUniversityDetail({
   majors,
   latitude,
   longitude,
-  faculties
+  faculties,
 }: UniversityType) {
-  const [selectedDegree, setSelectedDegree] = useState<string>("BACHELOR"); // Default degree filter
-  const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null); // Faculty filter
+  const [selectedFaculty, setSelectedFaculty] = useState<string | null>(null);
+  const [selectedDegree, setSelectedDegree] = useState<string>("BACHELOR"); // Default to "BACHELOR"
   const [filteredMajors, setFilteredMajors] = useState<MajorType[]>(majors);
   const [googleMapEmbedUrl, setGoogleMapEmbedUrl] = useState<string>("");
-  const [isOpen, setIsOpen] = React.useState(false);
   const { search, province_uuid, page, selectedUniversity } = useAppSelector(
     (state) => state.filter
   );
 
+  // State to hold the available degrees fetched from the faculties/majors
+  const [degreeOptions, setDegreeOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
 
-
-  // Fetch data (universities and courses)
   useEffect(() => {
-    // Filter majors based on selected degree and faculty
-    let filtered = majors;
+    // Extract unique degrees from the faculties/majors data
+    const degrees: string[] = [];
+    faculties.forEach((faculty) => {
+      faculty.majors.forEach((major) => {
+        if (!degrees.includes(major.degree)) {
+          degrees.push(major.degree); // Add unique degree to the list
+        }
+      });
+    });
 
-    if (selectedDegree) {
-      filtered = filtered.filter((major) => major.degree === selectedDegree);
-    }
+    // Map degrees to the format required by the Select component
+    const degreeOptions = degrees.map((degree) => ({
+      value: degree,
+      label: degree,
+    }));
 
-    if (selectedFaculty) {
-      filtered = filtered.filter((major) => major.faculty === selectedFaculty);
-    }
-
-    setFilteredMajors(filtered); // Update filtered majors
-  }, [selectedDegree, selectedFaculty, majors]); // Re-filter when degree or faculty changes
-
-  // Handle degree change
-  const handleDegreeChange = (degree: string) => {
-    setSelectedDegree(degree);
-  };
-
-  // Handle faculty change
-  const handleFacultyChange = (faculty: string) => {
-    setSelectedFaculty(faculty);
-  };
-
+    setDegreeOptions(degreeOptions); // Set the degree options state
+  }, [faculties]);
 
   useEffect(() => {
     // Generate the Google Maps Embed URL using latitude and longitude
@@ -159,23 +162,32 @@ export default function CardUniversityDetail({
     setGoogleMapEmbedUrl(mapUrl); // Set the map URL dynamically based on coordinates
   }, [latitude, longitude]);
 
-    const courses = [
-      { title: "គណិតវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-      { title: "រូបវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-      { title: "គីមីវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-      { title: "ជីវវិទ្យា", price: "$800 - $1200", duration: "សិក្សា 4 ឆ្នាំ" },
-      {
-        title: "ឌីជីថលវិទ្យា",
-        price: "$800 - $1200",
-        duration: "សិក្សា 4 ឆ្នាំ",
-      },
-      {
-        title: "បច្ចេកវិទ្យា",
-        price: "$800 - $1200",
-        duration: "សិក្សា 4 ឆ្នាំ",
-      },
-    ];
-  
+  // UseEffect to filter majors based on selected degree and faculty
+  useEffect(() => {
+    let majorsToFilter: MajorType[] = [];
+
+    // Loop through faculties to get majors and apply filtering
+    faculties.forEach((faculty) => {
+      let filteredMajors = faculty.majors;
+
+      // Filter by faculty if selected
+      if (selectedFaculty && faculty.name !== selectedFaculty) {
+        return; // Skip this faculty if it doesn't match the selected faculty
+      }
+
+      // Filter by degree if selected
+      if (selectedDegree) {
+        filteredMajors = filteredMajors.filter(
+          (major) => major.degree === selectedDegree
+        );
+      }
+
+      majorsToFilter = [...majorsToFilter, ...filteredMajors]; // Combine majors for the final result
+    });
+
+    setFilteredMajors(majorsToFilter); // Update filtered majors state
+  }, [selectedDegree, selectedFaculty, faculties]);
+
   return (
     <div className="min-h-screen bg-bglight">
       {/* Header */}
@@ -260,7 +272,7 @@ export default function CardUniversityDetail({
               <div className="aspect-[4/3] rounded-xl bg-gray-100 mb-4">
                 {/* Map placeholder */}
                 <div className="w-full h-full  flex items-center justify-center text-gray-400">
-                {googleMapEmbedUrl && (
+                  {googleMapEmbedUrl && (
                     <iframe
                       src={googleMapEmbedUrl}
                       width="600"
@@ -284,7 +296,7 @@ export default function CardUniversityDetail({
                   <div className="lg:text-[16px] md:text-sm text-[16px] text-primary ">
                     {website}
                   </div>
-                   </div>
+                </div>
                 <div className="flex items-center gap-2">
                   <Phone className="lg:w-5 lg:h-5 md:w-4 md:h-4 w-5 h-5 text-gray-400  lg:text-[16px] md:text-[16px] text-[16px]" />
                   <span className="lg:text-[16px] md:text-sm text-[16px] text-textprimary">
@@ -320,9 +332,8 @@ export default function CardUniversityDetail({
           </Card>
         </div>
 
-
-      {/* Main Content */}
-      <div className="md:col-span-2">
+        {/* Main Content */}
+        <div className="md:col-span-2">
           <Card>
             <CardContent>
               <h2 className="font-bold text-xl text-textprimary mb-4">
@@ -344,46 +355,87 @@ export default function CardUniversityDetail({
             </div>
 
             <div className="relative ">
-            <button
-                  onClick={() => handleDegreeChange("BACHELOR")}
-                  className={`block px-4 py-2 w-full text-left ${selectedDegree === "BACHELOR" ? "bg-green-100" : ""}`}
-                >
-                  BACHELOR
-                </button>
-                <button
-                  onClick={() => handleDegreeChange("ASSOCIATE")}
-                  className={`block px-4 py-2 w-full text-left ${selectedDegree === "ASSOCIATE" ? "bg-green-100" : ""}`}
-                >
-                  ASSOCIATE
-                </button>
-
-                
+              {/* Degree Filter */}
+              <div className="grid w-auto auto-rows-fr grid-cols-1 lg:gap-3 md:gap-8 gap-3 lg:grid-cols-2 md:grid-cols-1">
+                <Card>
+                  <CardContent>
+                    <h2 className="font-bold text-textprimary text-xl mb-4">
+                      Select Degree
+                    </h2>
+                    <div className="space-y-2">
+                      <Select
+                        options={degreeOptions} // Use the dynamically fetched degree options
+                        value={{ value: selectedDegree, label: selectedDegree }} // Set the default "BACHELOR"
+                        onChange={(selectedOption) =>
+                          setSelectedDegree(selectedOption?.value || "BACHELOR")
+                        }
+                        placeholder="Select Degree"
+                        isClearable
+                        className="rounded-full text-sm md:text-md lg:text-base"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+                {/* Faculty Filter */}
+                <Card>
+                  <CardContent>
+                    <h2 className="font-bold text-xl text-textprimary mb-4">
+                      Select Faculty
+                    </h2>
+                    <div className="space-y-2">
+                      <Select
+                        options={faculties.map((faculty) => ({
+                          value: faculty.name,
+                          label: faculty.name,
+                        }))}
+                        value={
+                          selectedFaculty
+                            ? { value: selectedFaculty, label: selectedFaculty }
+                            : null
+                        }
+                        onChange={(selectedOption) =>
+                          setSelectedFaculty(selectedOption?.value || null)
+                        }
+                        placeholder="Select Faculty"
+                        isClearable
+                        className="rounded-full text-sm md:text-md lg:text-base"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
-           {/* Main Content - Courses */}
-        <div className="md:col-span-2">
-          <Card>
-            <CardContent>
-              <h2 className="font-bold text-xl text-textprimary mb-4">Courses</h2>
+          {/* Main Content - Courses */}
+          <div className="md:col-span-2">
+            <div className="grid w-auto auto-rows-fr grid-cols-1 lg:gap-3 md:gap-3 gap-3 lg:grid-cols-2 md:grid-cols-1">
               {filteredMajors.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 lg:gap-4 md:gap-2 gap-2">
-                  {filteredMajors.map((course, index) => (
-                    <div key={index} className="bg-white rounded-xl shadow-sm p-4">
-                      <h3 className="text-lg font-semibold text-textprimary mb-2">{course.name}</h3>
-                      <p className="text-md text-gray-600 mb-1">{course.description}</p>
-                      <p className="text-md text-gray-600 mb-1">Fee per year: ${course.fee_per_year}</p>
-                      <p className="text-md text-gray-600">Duration: {course.duration_years} years</p>
-                    </div>
-                  ))}
-                </div>
+                filteredMajors.map((major) => (
+                  <div
+                    key={major.uuid}
+                    className="bg-white rounded-xl shadow-sm p-4"
+                  >
+                    <h3 className="text-lg font-semibold text-textprimary">
+                      {major.name}
+                    </h3>
+                    <p className="text-md text-gray-600">{major.description}</p>
+                    <p className="text-md text-gray-600">
+                      Fee per year: ${major.fee_per_year}
+                    </p>
+                    <p className="text-md text-gray-600">
+                      Duration: {major.duration_years} years
+                    </p>
+                  </div>
+                ))
               ) : (
-                <p>No courses found for selected degree and faculty.</p>
+                <div className="flex items-center h-20 ">
+                  <p className="text-center">No majors found for the selected degree and faculty.</p>
+                </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
           </div>
-          </div>
-          </main>
+        </div>
+      </main>
     </div>
   );
 }
