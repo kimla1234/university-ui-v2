@@ -6,13 +6,13 @@ import {
   useGetAllUserDraftQuery,
   useDeleteUserDraftMutation,
 } from "@/redux/service/draft";
-import Pagination from "./Pagination";
+import Pagination from "./PaginationList";
 import DeleteConfirmationModal from "./DeleteComfirmModal";
 import Image from "next/image";
 
 const DraftList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   // Fetch tests
   const { data, refetch } = useGetAllUserDraftQuery({
@@ -95,8 +95,10 @@ const DraftList = () => {
     );
   });
 
-  return (
-    <div className="relative h-screen">
+  return ( 
+    <div>
+      <h1 className="hidden lg:flex text-3xl pb-3 text-primary font-bold w-full text-left">Draft history</h1>
+      <div className="relative">
       {data?.payload.items && data.payload.items.length > 0 ? (
         <>
           <div className="grid gap-4 grid-cols-1 mb-5">{draftCards}</div>
@@ -104,9 +106,11 @@ const DraftList = () => {
             {/* Pagination */}
             <Pagination
               currentPage={currentPage}
-              totalPages={Math.ceil(
-                (data?.payload.metadata.total_items || 0) / itemsPerPage
-              )}
+              totalPages={
+                data?.payload.items?.length > 0
+                  ? Math.ceil((data?.payload.metadata.total_items || 0) / itemsPerPage)
+                  : 1
+              }
               setCurrentPage={setCurrentPage}
               itemsPerPage={itemsPerPage}
               setItemsPerPage={setItemsPerPage}
@@ -138,6 +142,7 @@ const DraftList = () => {
         onConfirm={handleDelete}
         title={selectedDraft?.title || ""}
       />
+    </div>
     </div>
   );
 };

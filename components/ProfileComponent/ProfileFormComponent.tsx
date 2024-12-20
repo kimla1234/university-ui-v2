@@ -95,7 +95,7 @@ const ProfileForm = () => {
         onSubmit={handleSubmit}
       >
         {({ values, setFieldValue }) => (
-          <Form className="space-y-6 rounded-md">
+          <Form className="space-y-6 rounded-md mt-6 lg:mt-0">
             <div className="w-full space-y-8">
               {/* Username */}
               <div>
@@ -136,7 +136,7 @@ const ProfileForm = () => {
                 <div className="w-1/2">
                   <Label htmlFor="date_of_birth" text="ថ្ងៃ ខែ ឆ្នាំ កំណើត" />
                   <DatePickerDemo
-                    selectedDate={values.date_of_birth?.toISOString() || ""}
+                    selectedDate={values.date_of_birth?.toISOString() || null}
                     onDateChange={(date) =>
                       setFieldValue("date_of_birth", date)
                     }
@@ -145,6 +145,7 @@ const ProfileForm = () => {
                 <div className="w-1/2">
                   <Label htmlFor="gender" text="ភេទ" />
                   <SelectDemo
+                    
                     selectedGender={values.gender}
                     onGenderChange={(gender) => setFieldValue("gender", gender)}
                   />

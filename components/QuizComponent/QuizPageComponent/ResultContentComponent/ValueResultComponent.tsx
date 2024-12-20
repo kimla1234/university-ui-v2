@@ -106,7 +106,8 @@ import { useParams } from "next/navigation";
 import { PersonalitiesCircularProgress } from "./PersonalitiesCircularProgress";
 import StyledContentCard from "./ValueDescription";
 import StyledContentList from "./ValueList";
-
+import { RecommendationCard } from "../../RecommendationCard";
+import QuizHeader from "../../QuizHeader";
 // Define ChartData type
 type ChartData = {
   label: string;
@@ -194,6 +195,38 @@ export const ValueResultComponent = () => {
     );
   };
 
+  const recommendations = [
+    {
+      jobTitle: "Software Engineer",
+      jobDesc:
+        "Design, develop, and maintain software applications. Collaborate with cross-functional teams to deliver high-quality products.",
+      majors: [
+        {
+          major_name: "Computer Science",
+          schools: ["MIT", "Stanford University", "Carnegie Mellon University"],
+        },
+        {
+          major_name: "Software Engineering",
+          schools: ["Harvard University", "UC Berkeley"],
+        },
+      ],
+    },
+    {
+      jobTitle: "Data Analyst",
+      jobDesc:
+        "Analyze data to uncover trends and insights. Prepare data reports to assist in decision-making.",
+      majors: [
+        {
+          major_name: "Data Science",
+          schools: ["NYU", "Columbia University"],
+        },
+        {
+          major_name: "Statistics",
+          schools: ["Princeton University", "University of Chicago"],
+        },
+      ],
+    },
+  ];
   // Render custom legend
   const renderCustomLegend = () => (
     <div className="w-full   space-y-2  flex flex-wrap justify-start items-start   lg:grid lg:grid-cols-2 lg:gap-4">
@@ -308,6 +341,25 @@ export const ValueResultComponent = () => {
           })}
         </div>
       </div>
+      <div className="space-y-4 lg:space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12 ">
+          <QuizHeader
+            title="ការងារទាំងនេះអាចនឹងសាកសមជាមួយអ្នក"
+            description="These career may suitable for you"
+            size="sm"
+            type="result"
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {recommendations.map((recommendation, index) => (
+              <RecommendationCard
+                key={index}
+                jobTitle={recommendation.jobTitle}
+                jobDesc={recommendation.jobDesc}
+                majors={recommendation.majors}
+              />
+            ))}
+          </div>
+        </div>
     </div>
   );
 };

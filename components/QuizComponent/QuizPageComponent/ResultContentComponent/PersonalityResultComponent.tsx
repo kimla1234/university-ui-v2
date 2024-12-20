@@ -7,7 +7,7 @@ import { useFetchAssessmentDetailsQuery } from "@/redux/feature/assessment/resul
 import { useParams } from "next/navigation";
 import CardPersonality from "../../CardPersonality";
 import ScoreBar from "../ScoreBarPersonality";
-
+import { RecommendationCard } from "../../RecommendationCard";
 // Define types for API response
 type PersonalityDimension = {
   dimension_name: string;
@@ -86,11 +86,13 @@ export const PersonalityResultComponent = () => {
   // Function to dynamically get matching dimensions
   const getDimensionPair = (name1: string, name2: string) => {
     const dim1 =
-      personalitiesDimension?.find((d: PersonalityDimension) => d.dimension_name === name1)
-        ?.score || 0;
+      personalitiesDimension?.find(
+        (d: PersonalityDimension) => d.dimension_name === name1
+      )?.score || 0;
     const dim2 =
-      personalitiesDimension?.find((d: PersonalityDimension) => d.dimension_name === name2)
-        ?.score || 0;
+      personalitiesDimension?.find(
+        (d: PersonalityDimension) => d.dimension_name === name2
+      )?.score || 0;
     return { dim1, dim2 };
   };
 
@@ -110,21 +112,53 @@ export const PersonalityResultComponent = () => {
   //   const averageSkill = response?.[0]?.skillsGrouped["Average"];
   //   const weakSkill = response?.[0]?.skillsGrouped["Weak"];
 
-  const recommendedCareer = response?.[0]?.careerRecommendations
+  const recommendedCareer = response?.[0]?.careerRecommendations;
   console.log("Recommended Career: ", recommendedCareer);
-
+  // Example data for the RecommendationCard
+  const recommendations = [
+    {
+      jobTitle: "Software Engineer",
+      jobDesc:
+        "Design, develop, and maintain software applications. Collaborate with cross-functional teams to deliver high-quality products.",
+      majors: [
+        {
+          major_name: "Computer Science",
+          schools: ["MIT", "Stanford University", "Carnegie Mellon University"],
+        },
+        {
+          major_name: "Software Engineering",
+          schools: ["Harvard University", "UC Berkeley"],
+        },
+      ],
+    },
+    {
+      jobTitle: "Data Analyst",
+      jobDesc:
+        "Analyze data to uncover trends and insights. Prepare data reports to assist in decision-making.",
+      majors: [
+        {
+          major_name: "Data Science",
+          schools: ["NYU", "Columbia University"],
+        },
+        {
+          major_name: "Statistics",
+          schools: ["Princeton University", "University of Chicago"],
+        },
+      ],
+    },
+  ];
   return (
     <div className="bg-white">
       {/* Personalities Name and Description */}
       <div className=" max-w-7xl mx-auto">
-      <div className="">
-      <CardPersonality
-          titleForCard="បុគ្គលិកលក្ខណៈរបស់អ្នកគឺជា"
-          name={personalities?.name}
-          title={personalities?.title}
-          description={personalities?.description}
-        />
-      </div>
+        <div className="">
+          <CardPersonality
+            titleForCard="បុគ្គលិកលក្ខណៈរបស់អ្នកគឺជា"
+            name={personalities?.name}
+            title={personalities?.title}
+            description={personalities?.description}
+          />
+        </div>
         <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px] ">
           <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
             ក្រាហ្វបង្ហាញពីបុគ្គលិកលក្ខណៈ
@@ -192,7 +226,7 @@ export const PersonalityResultComponent = () => {
           </div>
         </div>
         <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px]">
-        <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
+          <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
             លក្ខណៈសំខាន់ៗរបស់ {personalities?.name}
           </h2>
           {/* Positive Traits */}
@@ -248,7 +282,7 @@ export const PersonalityResultComponent = () => {
           </div>
         </div>
         <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px]">
-        <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
+          <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
             លក្ខណៈសំខាន់ៗរបស់ {personalities?.name}
           </h2>
           {/* Strength */}
@@ -303,9 +337,26 @@ export const PersonalityResultComponent = () => {
             </div>
           </div>
         </div>
+        <div className="space-y-4 lg:space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12 ">
+          <QuizHeader
+            title="ការងារទាំងនេះអាចនឹងសាកសមជាមួយអ្នក"
+            description="These career may suitable for you"
+            size="sm"
+            type="result"
+          />
 
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {recommendations.map((recommendation, index) => (
+              <RecommendationCard
+                key={index}
+                jobTitle={recommendation.jobTitle}
+                jobDesc={recommendation.jobDesc}
+                majors={recommendation.majors}
+              />
+            ))}
+          </div>
+        </div>
       </div>
-      {/* Strength */}
     </div>
   );
 };
