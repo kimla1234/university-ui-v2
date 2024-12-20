@@ -28,7 +28,7 @@ export default function CardUniversity({
           className="object-contain lg:w-40 lg:h-40 md:w-40 md:h-40 w-24 h-24 mr-2 rounded-t-lg md:rounded-none md:rounded-s-lg"
           src={
             logo_url
-              ? `http://136.228.158.126:3300/${logo_url}` // If logo_url exists, use the actual image
+              ? `${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${logo_url}` // If logo_url exists, use the actual image
               : '/assets/itc.png' // Placeholder image when logo_url is not available
           }
           alt={kh_name}

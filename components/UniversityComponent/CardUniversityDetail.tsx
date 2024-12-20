@@ -220,7 +220,7 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
         <div className="hidden md:block lg:block  container mx-auto px-4  relative lg:-mt-12 md:-mt-12 -mt-6">
           <div className="bg-white  bg-opacity-30 lg:w-auto lg:h-[290px] md:w-auto md:h-[230px] w-auto h-[200px] backdrop-blur-lg border rounded-xl lg:p-6 md:p-6 p-3 shadow-sm flex  flex-row md:flex-row items-center lg:gap-6 md:gap-6 gap-2">
             <Image
-              src={`http://136.228.158.126:3300/${logo_url}`}
+              src={`${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${logo_url}`}
               alt={kh_name}
               width={200}
               height={200}
@@ -249,7 +249,7 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
           <div className="bg-white   bg-opacity-30 lg:w-auto lg:h-[290px] md:w-auto md:h-[230px] w-auto h-[140px] backdrop-blur-lg border rounded-xl lg:p-6 md:p-6 p-3 shadow-sm lg:flex md:flex  flex-row md:flex-row items-center lg:gap-6 md:gap-6 gap-2">
             <div className="flex">
               <Image
-                src={`http://136.228.158.126:3300/${logo_url}`}
+                src={`${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${logo_url}`}
                 alt="ISTAD Logo"
                 width={200}
                 height={200}
