@@ -83,7 +83,7 @@ export default function ResultDynamicComponent() {
         switch (resultType) {
             case 'personality':
                 return (
-                    <div>
+                    <div className=''>
                         <PersonalityResultComponent/>
                     </div>
                 );
@@ -98,7 +98,7 @@ export default function ResultDynamicComponent() {
                 );
             case 'value':
                 return (
-                    <div>
+                    <div className='bg-white'>
                        <ValueResultComponent/> 
                     </div>
                 );

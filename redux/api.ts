@@ -39,6 +39,7 @@ type BaseQueryReturnType = QueryReturnValue<
   Record<string, unknown>
 >;
 
+
 // baseQueryWithReAuth with the proper type
 const baseQueryWithReAuth = async (
   args: BaseQueryArgs,
@@ -47,7 +48,9 @@ const baseQueryWithReAuth = async (
 ): Promise<BaseQueryReturnType> => {
   let result = await baseQuery(args, api, extraOptions);
     console.log("Final request with headers:", args);
-    
+    console.log("Url:", args.url);
+    console.log("Method:", args.method);
+    console.log("")
   if (result.error?.status === 401) {
     console.log("Unauthorized. Attempting token refresh...");
     const res = await fetch(`/api/refresh`, {
@@ -76,7 +79,7 @@ const baseQueryWithReAuth = async (
 
 // Create the API service with Redux Toolkit's `createApi`
 export const normPlovApi = createApi({
-  tagTypes:["userProfile","userTest","userDraft"],
+  tagTypes:["userTest","userDraft","userProfile"],
   reducerPath: "normPlovApi",
   baseQuery: baseQueryWithReAuth, // Use the custom base query with re-authentication logic
   endpoints: () => ({}),
@@ -84,9 +87,9 @@ export const normPlovApi = createApi({
 
 
 
-// kimla Pro
+// // kimla Pro
 
-// Create the API slice with redux-toolkit's createApi
+// // Create the API slice with redux-toolkit's createApi
 export const universityApi = createApi({
   reducerPath: "universityApi",
   baseQuery: fetchBaseQuery({

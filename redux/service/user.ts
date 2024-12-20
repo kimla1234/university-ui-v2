@@ -22,7 +22,9 @@ type UserPayload = {
 };
 
 type updateProfileResponse={
+  status:number,
   message: string;
+  payload: UserPayload;
 }
 type updateUserProfile ={
   username?:string | null;
@@ -52,10 +54,10 @@ export const userApi = normPlovApi.injectEndpoints({
         updateProfileUser:builder.mutation<updateProfileResponse,{uuid:string,user:updateUserProfile}>({
           query:({uuid,user})=>({
             url:`api/v1/user/profile/update/${uuid}`,
-            method:"PATCH",
+            method:"PUT",
             body:user
           }),
-          // invalidatesTags:["userProfile"]
+          invalidatesTags:["userProfile"]
         }),
          // Post image by uuid user
          postImage: builder.mutation<UserResponse, { uuid: string; avatar_url: File }>({

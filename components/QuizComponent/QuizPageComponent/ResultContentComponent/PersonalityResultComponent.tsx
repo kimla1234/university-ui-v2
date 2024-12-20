@@ -1,25 +1,57 @@
 import React from "react";
 import checkIcon from "@/public/Quiz/skill-icon/check.png";
-import upIcon from "@/public/Quiz/skill-icon/up.png";
 import xIcon from "@/public/Quiz/skill-icon/x.png";
 import QuizHeader from "../../QuizHeader";
 import { QuizResultListing } from "../../QuizResultListing";
 import { useFetchAssessmentDetailsQuery } from "@/redux/feature/assessment/result";
 import { useParams } from "next/navigation";
-import { RecommendationCard } from "../../RecommendationCard";
 import CardPersonality from "../../CardPersonality";
 import ScoreBar from "../ScoreBarPersonality";
 
-type Major = {
-  major_name: string;
-  schools: string[];
+// Define types for API response
+type PersonalityDimension = {
+  dimension_name: string;
+  score: number;
 };
+// type PersonalityTraits = {
+//   positive: string[];
+//   negative: string[];
+// };
 
-type RecommendedCareer = {
-  career_name: string;
-  description: string;
-  majors: Major[];
-};
+// type Personality = {
+//   name: string;
+//   title: string;
+//   description: string;
+// };
+
+// type CareerRecommendation = {
+//   career_name: string;
+//   description: string;
+//   majors: {
+//     major_name: string;
+//     schools: string[];
+//   }[];
+// };
+
+// type ApiResponse = {
+//   personalityType: Personality;
+//   dimensions: PersonalityDimension[];
+//   traits: PersonalityTraits;
+//   strengths: string[];
+//   weaknesses: string[];
+//   careerRecommendations: CareerRecommendation[];
+// }[];
+
+// type Major = {
+//   major_name: string;
+//   schools: string[];
+// };
+
+// type RecommendedCareer = {
+//   career_name: string;
+//   description: string;
+//   majors: Major[];
+// };
 
 export const PersonalityResultComponent = () => {
   const params = useParams();
@@ -47,8 +79,6 @@ export const PersonalityResultComponent = () => {
     console.error("Error fetching data:", error);
     return <p>Error loading data</p>;
   }
-  console;
-
   //   const skillCategory = response?.[0]?.categoryPercentages;
   const personalities = response?.[0]?.personalityType;
   const personalitiesDimension = response?.[0]?.dimensions;
@@ -56,10 +86,10 @@ export const PersonalityResultComponent = () => {
   // Function to dynamically get matching dimensions
   const getDimensionPair = (name1: string, name2: string) => {
     const dim1 =
-      personalitiesDimension?.find((d: any) => d.dimension_name === name1)
+      personalitiesDimension?.find((d: PersonalityDimension) => d.dimension_name === name1)
         ?.score || 0;
     const dim2 =
-      personalitiesDimension?.find((d: any) => d.dimension_name === name2)
+      personalitiesDimension?.find((d: PersonalityDimension) => d.dimension_name === name2)
         ?.score || 0;
     return { dim1, dim2 };
   };
@@ -80,23 +110,26 @@ export const PersonalityResultComponent = () => {
   //   const averageSkill = response?.[0]?.skillsGrouped["Average"];
   //   const weakSkill = response?.[0]?.skillsGrouped["Weak"];
 
-  const recommendedCareer = response?.[0]?.strongCareers;
+  const recommendedCareer = response?.[0]?.careerRecommendations
+  console.log("Recommended Career: ", recommendedCareer);
 
   return (
-    <div className="bg-red-100">
+    <div className="bg-white">
       {/* Personalities Name and Description */}
       <div className=" max-w-7xl mx-auto">
-        <CardPersonality
+      <div className="">
+      <CardPersonality
           titleForCard="បុគ្គលិកលក្ខណៈរបស់អ្នកគឺជា"
           name={personalities?.name}
           title={personalities?.title}
           description={personalities?.description}
         />
-        <div className="border border-slate-100 mt-14 p-6 rounded-[8px] ">
+      </div>
+        <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px] ">
           <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
-            ប្រភេទបុគ្គលិកលក្ខណៈ
+            ក្រាហ្វបង្ហាញពីបុគ្គលិកលក្ខណៈ
           </h2>
-          <div className="space-y-6 p-8">
+          <div className="space-y-6 md:p-8">
             {/* Introvert vs Extrovert */}
             <ScoreBar
               labelLeft="Introvert"
@@ -107,8 +140,8 @@ export const PersonalityResultComponent = () => {
               colorRight="bg-orange-400"
               customStyles={{
                 container: "rounded-xl",
-                labelText: "text-red-600 text-xl font-bold",
-                valueText: "text-gray-700 text-xl font-semibold",
+                labelText: "text-red-600 text-md md:text-xl font-bold",
+                valueText: "text-gray-700  text-md md:text-xl font-semibold",
               }}
             />
 
@@ -122,8 +155,8 @@ export const PersonalityResultComponent = () => {
               colorRight="bg-teal-400"
               customStyles={{
                 container: "",
-                labelText: "text-red-600 text-xl font-bold",
-                valueText: "text-gray-700 text-xl font-semibold",
+                labelText: "text-red-600 text-md md:text-xl font-bold",
+                valueText: "text-gray-700  text-md md:text-xl font-semibold",
               }}
             />
 
@@ -137,8 +170,8 @@ export const PersonalityResultComponent = () => {
               colorRight="bg-blue-700"
               customStyles={{
                 container: "",
-                labelText: "text-red-600 text-xl font-bold",
-                valueText: "text-gray-700 text-xl font-semibold",
+                labelText: "text-red-600 text-md md:text-xl font-bold",
+                valueText: "text-gray-700  text-md md:text-xl font-semibold",
               }}
             />
 
@@ -152,18 +185,22 @@ export const PersonalityResultComponent = () => {
               colorRight="bg-yellow-400"
               customStyles={{
                 container: "",
-                labelText: "text-red-600 text-xl font-bold",
-                valueText: "text-gray-700 text-xl font-semibold",
+                labelText: "text-red-600 text-md md:text-xl font-bold",
+                valueText: "text-gray-700  text-md md:text-xl font-semibold",
               }}
             />
           </div>
-
+        </div>
+        <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px]">
+        <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
+            លក្ខណៈសំខាន់ៗរបស់ {personalities?.name}
+          </h2>
           {/* Positive Traits */}
-          <div className="bg-bgPrimaryLight">
-            <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
+          <div className="">
+            <div className="text-primary space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
               <QuizHeader
-                title="ចំណុចខ្លាំងរបស់អ្នក"
-                description="Strength"
+                title="ចំណុចវិជ្ជមានរបស់អ្នក"
+                description="Positive Traits"
                 size="sm"
                 type="result"
                 titleColor="text-success"
@@ -185,11 +222,11 @@ export const PersonalityResultComponent = () => {
           </div>
 
           {/* Negative Traits */}
-          <div className="bg-bgPrimaryLight">
+          <div className="">
             <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
               <QuizHeader
-                title="ចំណុចខ្សោយរបស់អ្នក"
-                description="Weakness"
+                title="ចំណុចអវិជ្ជមានរបស់អ្នក"
+                description="Negative Traits"
                 size="sm"
                 type="result"
                 titleColor="text-danger"
@@ -209,9 +246,14 @@ export const PersonalityResultComponent = () => {
               </div>
             </div>
           </div>
+        </div>
+        <div className="mx-4 md:mx-0 border border-slate-50 mt-5 md:mt-14 p-6 rounded-[8px]">
+        <h2 className="bg-secondary inline-block text-white text-lg md:text-2xl px-4 py-2 rounded-[8px] mb-6">
+            លក្ខណៈសំខាន់ៗរបស់ {personalities?.name}
+          </h2>
           {/* Strength */}
-          <div className="bg-bgPrimaryLight">
-            <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
+          <div className="">
+            <div className="space-y-8 text-primary max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
               <QuizHeader
                 title="ចំណុចខ្លាំងរបស់អ្នក"
                 description="Strength"
@@ -236,7 +278,7 @@ export const PersonalityResultComponent = () => {
           </div>
 
           {/* Weakness */}
-          <div className="bg-bgPrimaryLight">
+          <div className="">
             <div className="space-y-8 max-w-7xl mx-auto p-4 md:p-10 lg:p-12">
               <QuizHeader
                 title="ចំណុចខ្សោយរបស់អ្នក"
@@ -261,6 +303,7 @@ export const PersonalityResultComponent = () => {
             </div>
           </div>
         </div>
+
       </div>
       {/* Strength */}
     </div>

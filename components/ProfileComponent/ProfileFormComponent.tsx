@@ -45,11 +45,11 @@ const ProfileForm = () => {
     try {
       // Prepare the payload
       const payload = {
-        username: values.username || null,
-        address: values.address || null,
-        phone_number: values.phone_number || null,
-        bio: values.bio || null,
-        gender: values.gender || null,
+        username: values.username || "",
+        address: values.address || "",
+        phone_number: values.phone_number || "",
+        bio: values.bio || "",
+        gender: values.gender || "",
         date_of_birth: values.date_of_birth
           ? values.date_of_birth.toISOString().split("T")[0] // Convert to 'YYYY-MM-DD'
           : null,
@@ -136,7 +136,7 @@ const ProfileForm = () => {
                 <div className="w-1/2">
                   <Label htmlFor="date_of_birth" text="ថ្ងៃ ខែ ឆ្នាំ កំណើត" />
                   <DatePickerDemo
-                    selectedDate={values.date_of_birth?.toISOString() || null}
+                    selectedDate={values.date_of_birth?.toISOString() || ""}
                     onDateChange={(date) =>
                       setFieldValue("date_of_birth", date)
                     }
