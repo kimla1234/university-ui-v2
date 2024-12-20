@@ -9,7 +9,7 @@ import { useGetUserQuery } from "@/redux/service/user"; // Import the user API
 const navLinks = [
   { href: "/", label: "ទំព័រដើម" },
   { href: "/test", label: "តេស្ត" },
-  { href: "/university", label: "គ្រឹស្ថានសិក្សា" },
+  { href: "/university", label: "គ្រឹះស្ថានសិក្សា" },
   { href: "/jobs", label: "ការងារ" },
   { href: "/privacy-policy", label: "ឯកជនភាព" },
   { href: "/about-us", label: "អំពីយើង" },
@@ -62,11 +62,11 @@ export default function NavbarPage() {
               className="text-lg lg:text-xl text-green-700 font-bold"
             >
              <Image
-                src="/logo.png"
+                src="/assets/logo.jpg"
                 alt="Logo"
                 width={30}
                 height={30}
-                className="object-contain"
+                className="object-contain lg:w-[50px] md:w-[50px]  "
               />
             </Link>
           
