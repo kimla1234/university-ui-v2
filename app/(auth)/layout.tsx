@@ -24,7 +24,7 @@ export default function  AuthLayout({
 }>) {
 return (
   <html lang="en">
-      <body className={`${suwannaphum} ${inter} antialiased`}>
+      <body className={`${suwannaphum.className} ${inter} antialiased`}>
         {/* Main content */}
         <main> {children}</main> 
       </body>
