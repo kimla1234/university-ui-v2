@@ -13,7 +13,7 @@ import {
 } from "@/redux/feature/filter/filterSlice";
 import UniversitySkeleton from "@/components/SkeletonLoading/UniversitySkeleton/UniversitySkeleton";
 import Image from "next/image";
-import { useGetUniversitiesQuery } from "@/redux/api";
+import { useGetUniversitiesQuery } from "@/redux/service/university";
 
 
 type OptionType = {

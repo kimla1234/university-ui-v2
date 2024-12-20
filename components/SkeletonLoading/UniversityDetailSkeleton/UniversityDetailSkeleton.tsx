@@ -1,10 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { MapPin, Globe, Phone, Mail } from "lucide-react";
-import { ChevronDown } from "lucide-react";
-import { FaBook } from "react-icons/fa";
-import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import React from "react";
+
 
 // Button component
 const Button = React.forwardRef<

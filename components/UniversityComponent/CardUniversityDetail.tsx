@@ -1,11 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { MapPin, Globe, Phone, Mail } from "lucide-react";
-import { ChevronDown } from "lucide-react";
-import { FaBook } from "react-icons/fa";
 import Image from "next/image";
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setSelectedDegree } from "@/redux/feature/filter/filterSlice";
+
 import Select from "react-select";
 
 // Define the major type
@@ -19,13 +16,7 @@ type MajorType = {
   faculty?: string; // Make the faculty field optional
 };
 
-// Sample data for available degrees and faculties (this would ideally come from your API)
-const availableDegrees = ["BACHELOR", "MASTER", "PHD"];
-const availableFaculties = [
-  { value: "Engineering", label: "Engineering" },
-  { value: "Business", label: "Business" },
-  { value: "Arts", label: "Arts" },
-];
+
 
 // Type definition for universities
 type UniversityType = {
@@ -52,8 +43,17 @@ type UniversityType = {
     uuid: string;
     name: string;
     description: string;
-    majors: MajorType[];
-  }[]; // Faculties with majors
+    majors: {
+      items: MajorType[];
+      metadata: { total_pages: number; page: number };
+    };
+  }[];
+};
+
+// Define the option type for react-select
+type SelectOption = {
+  value: string;
+  label: string;
 };
 
 // Button component
@@ -127,9 +127,8 @@ export default function CardUniversityDetail({
   const [selectedDegree, setSelectedDegree] = useState<string>("BACHELOR"); // Default to "BACHELOR"
   const [filteredMajors, setFilteredMajors] = useState<MajorType[]>(majors);
   const [googleMapEmbedUrl, setGoogleMapEmbedUrl] = useState<string>("");
-  const { search, province_uuid, page, selectedUniversity } = useAppSelector(
-    (state) => state.filter
-  );
+  const [selectedPage, setSelectedPage] = useState<number>(1); // Start with page 1
+  const [totalPages, setTotalPages] = useState<number>(1);
 
   // State to hold the available degrees fetched from the faculties/majors
   const [degreeOptions, setDegreeOptions] = useState<
@@ -137,17 +136,15 @@ export default function CardUniversityDetail({
   >([]);
 
   useEffect(() => {
-    // Extract unique degrees from the faculties/majors data
     const degrees: string[] = [];
     faculties.forEach((faculty) => {
-      faculty.majors.forEach((major) => {
+      faculty.majors.items.forEach((major) => {
         if (!degrees.includes(major.degree)) {
-          degrees.push(major.degree); // Add unique degree to the list
+          degrees.push(major.degree);
         }
       });
     });
 
-    // Map degrees to the format required by the Select component
     const degreeOptions = degrees.map((degree) => ({
       value: degree,
       label: degree,
@@ -163,30 +160,47 @@ export default function CardUniversityDetail({
   }, [latitude, longitude]);
 
   // UseEffect to filter majors based on selected degree and faculty
+  // Filter majors based on selected degree and faculty, with pagination
   useEffect(() => {
-    let majorsToFilter: MajorType[] = [];
+    let majorsToDisplay = faculties
+      .flatMap((faculty) => faculty.majors.items)
+      .filter((major) => major.degree === selectedDegree);
 
-    // Loop through faculties to get majors and apply filtering
-    faculties.forEach((faculty) => {
-      let filteredMajors = faculty.majors;
+    if (selectedFaculty) {
+      majorsToDisplay = majorsToDisplay.filter((major) =>
+        faculties.some(
+          (faculty) =>
+            faculty.name === selectedFaculty &&
+            faculty.majors.items.includes(major)
+        )
+      );
+    }
 
-      // Filter by faculty if selected
-      if (selectedFaculty && faculty.name !== selectedFaculty) {
-        return; // Skip this faculty if it doesn't match the selected faculty
-      }
+    // Calculate the total number of pages based on 10 items per page
+    setTotalPages(Math.ceil(majorsToDisplay.length / 10)); // 10 items per page
 
-      // Filter by degree if selected
-      if (selectedDegree) {
-        filteredMajors = filteredMajors.filter(
-          (major) => major.degree === selectedDegree
-        );
-      }
+    // Paginate the results
+    const paginatedMajors = majorsToDisplay.slice(
+      (selectedPage - 1) * 10,
+      selectedPage * 10
+    );
 
-      majorsToFilter = [...majorsToFilter, ...filteredMajors]; // Combine majors for the final result
-    });
+    setFilteredMajors(paginatedMajors);
+  }, [selectedDegree, selectedFaculty, faculties, selectedPage]);
 
-    setFilteredMajors(majorsToFilter); // Update filtered majors state
-  }, [selectedDegree, selectedFaculty, faculties]);
+  // Handle Degree Selection Change
+const handleDegreeChange = (selectedOption: SelectOption | null) => {
+  setSelectedDegree(selectedOption?.value || ""); // Set to an empty string if no option is selected
+};
+
+// Handle Faculty Selection Change
+const handleFacultyChange = (selectedOption: SelectOption | null) => {
+  setSelectedFaculty(selectedOption?.value || null); // Set to null if no option is selected
+};
+
+  const handlePageChange = (pageNumber: number) => {
+    setSelectedPage(pageNumber);
+  };
 
   return (
     <div className="min-h-screen bg-bglight">
@@ -364,14 +378,12 @@ export default function CardUniversityDetail({
                     </h2>
                     <div className="space-y-2">
                       <Select
-                        options={degreeOptions} // Use the dynamically fetched degree options
-                        value={{ value: selectedDegree, label: selectedDegree }} // Set the default "BACHELOR"
-                        onChange={(selectedOption) =>
-                          setSelectedDegree(selectedOption?.value || "BACHELOR")
-                        }
+                        options={degreeOptions}
+                        value={{ value: selectedDegree, label: selectedDegree }}
+                        onChange={handleDegreeChange}
                         placeholder="Select Degree"
                         isClearable
-                        className="rounded-full text-sm md:text-md lg:text-base"
+                        className="rounded-full text-sm md:text-md lg:text-base mb-4"
                       />
                     </div>
                   </CardContent>
@@ -393,9 +405,7 @@ export default function CardUniversityDetail({
                             ? { value: selectedFaculty, label: selectedFaculty }
                             : null
                         }
-                        onChange={(selectedOption) =>
-                          setSelectedFaculty(selectedOption?.value || null)
-                        }
+                        onChange={handleFacultyChange}
                         placeholder="Select Faculty"
                         isClearable
                         className="rounded-full text-sm md:text-md lg:text-base"
@@ -428,12 +438,35 @@ export default function CardUniversityDetail({
                   </div>
                 ))
               ) : (
-                <div className="flex items-center h-20 ">
-                  <p className="text-center">No majors found for the selected degree and faculty.</p>
+                <div className="flex items-center h-20">
+                  <p className="text-center">
+                    No majors found for the selected degree and faculty.
+                  </p>
                 </div>
               )}
             </div>
           </div>
+          {/* Pagination Controls */}
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex justify-center mt-4">
+              <button
+                onClick={() => handlePageChange(selectedPage - 1)}
+                disabled={selectedPage <= 1}
+                className="px-4 py-2 bg-primary text-white  disabled:bg-gray-200 rounded-xl"
+              >
+                Previous
+              </button>
+              <div className="mx-4 w-[40px] h-[40px]  bg-slate-200 rounded-full flex justify-center items-center text-textprimary">{selectedPage}</div>
+              <button
+                onClick={() => handlePageChange(selectedPage + 1)}
+                disabled={selectedPage >= totalPages}
+                className="px-4 py-2 bg-primary text-white  disabled:bg-gray-300 rounded-xl"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>

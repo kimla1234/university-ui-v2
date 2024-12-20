@@ -13,7 +13,22 @@ type MajorType = {
   degree: string;
   faculty?: string; // Optional, as faculties may or may not be assigned
 };
-// Fallback major data with missing properties
+
+type MajorsWithMetadata = {
+  items: MajorType[];
+  metadata: {
+    total_pages: number;
+    page: number;
+  };
+};
+
+type FacultyType = {
+  uuid: string;
+  name: string;
+  description: string;
+  majors: MajorsWithMetadata; // Correctly typed as { items: MajorType[]; metadata: { total_pages: number; page: number; } }
+};
+
 const fallbackMajor = {
   uuid: "no-id",
   name: "No majors available",
@@ -22,7 +37,8 @@ const fallbackMajor = {
   duration_years: 0,
   description: "No description available",
 };
-// Type definition for universities
+
+// Updated UniversityType with correct majors structure
 type UniversityType = {
   uuid: string;
   kh_name: string;
@@ -31,7 +47,7 @@ type UniversityType = {
   province_name: string;
   popular_major: string;
   logo_url: string;
-  cover_image: string | null; // Handle null value
+  cover_image: string | null;
   phone: string;
   lowest_price: number;
   highest_price: number;
@@ -42,35 +58,20 @@ type UniversityType = {
   description: string;
   mission: string;
   vision: string;
-  majors: {
-    // Define majors as an array of objects with appropriate properties
-    uuid: string;
-    name: string;
-    description: string;
-    fee_per_year: number;
-    duration_years: number;
-    degree: string;
-  }[]; // Handle empty array
-  faculties: {
-    uuid: string;
-    name: string;
-    description: string;
-    majors?: MajorType[]; // Make 'majors' optional here
-  }[]; // Faculties with optional majors
+  majors: MajorType[]; // Handle empty array
+  faculties: FacultyType[]; // Faculties with the correct structure
 };
 
 export default function Page({ params }: { params: { id: string } }) {
-  
-  const { search, province_uuid, page, selectedDegree, selectedFaculty } =
-    useAppSelector((state) => state.filter);
+  const { selectedDegree, selectedFaculty } = useAppSelector(
+    (state) => state.filter
+  );
 
-  // Renamed to 'Page'
   const [universities, setUniversities] = useState<UniversityType[]>([]);
   const [filteredMajors, setFilteredMajors] = useState<MajorType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch universities on component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -80,12 +81,11 @@ export default function Page({ params }: { params: { id: string } }) {
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
-  
+
         const data = await response.json();
-        console.log("API Response:", data);  // Log the entire response
-  
+        console.log("API Response:", data);
+
         if (data && data.payload) {
-          console.log("Majors:", data.payload.faculties);  // Log majors to verify degree
           setUniversities([data.payload]);
         } else {
           setError("Data format error: No valid university data found");
@@ -98,14 +98,9 @@ export default function Page({ params }: { params: { id: string } }) {
         setLoading(false);
       }
     };
-  
+
     fetchData();
   }, [params.id]);
-  
-  
-
-
-  
 
   useEffect(() => {
     if (universities.length > 0) {
@@ -115,11 +110,13 @@ export default function Page({ params }: { params: { id: string } }) {
         (faculty) => faculty.name === selectedFaculty
       );
 
-      let majorsToFilter = selectedFacultyObj?.majors || [];
+      let majorsToFilter = selectedFacultyObj?.majors.items || [];
 
       // If selectedDegree is not null, filter majors by degree
       if (selectedDegree) {
-        majorsToFilter = majorsToFilter.filter((major) => major.degree === selectedDegree);
+        majorsToFilter = majorsToFilter.filter(
+          (major) => major.degree === selectedDegree
+        );
       }
 
       setFilteredMajors(majorsToFilter); // Update filtered majors
@@ -141,7 +138,7 @@ export default function Page({ params }: { params: { id: string } }) {
   return (
     <div>
       {universities.length > 0 ? (
-        universities.map((university: any, index) => (
+        universities.map((university: UniversityType, index) => (
           <CardUniversityDetail
             key={index}
             uuid={university.uuid}
@@ -156,20 +153,18 @@ export default function Page({ params }: { params: { id: string } }) {
             lowest_price={university.lowest_price}
             highest_price={university.highest_price}
             latitude={university.latitude}
-            longitude={university.longitude} // Added latitude and longitude properties for map rendering
+            longitude={university.longitude}
             email={university.email}
             website={university.website}
             description={university.description}
             mission={university.mission}
             vision={university.vision}
-            majors={
-              filteredMajors.length > 0 ? filteredMajors : [fallbackMajor]
-            } // Ensure filteredMajors is not undefined
+            majors={filteredMajors.length > 0 ? filteredMajors : [fallbackMajor]}
             faculties={university.faculties || []}
           />
         ))
       ) : (
-        <div>No universities found</div> // Show this if the universities array is empty
+        <div>No universities found</div>
       )}
     </div>
   );

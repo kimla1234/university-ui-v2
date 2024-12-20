@@ -1,4 +1,3 @@
-import { BiRightArrowAlt } from "react-icons/bi";
 import Image from "next/image";
 import { MapPin } from "lucide-react";
 
