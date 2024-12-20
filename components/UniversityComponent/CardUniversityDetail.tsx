@@ -208,7 +208,7 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
       <header className="relative">
         <div className="lg:w-full lg:h-[300px] md:w-full md:h-[200px] w-full h-[100px] overflow-hidden">
           <Image
-            src={`http://136.228.158.126:3300/${cover_image}`}
+            src={`${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${cover_image}`}
             alt={kh_name}
             width={200}
             height={200}
