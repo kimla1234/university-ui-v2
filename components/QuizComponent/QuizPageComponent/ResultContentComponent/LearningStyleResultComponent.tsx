@@ -30,6 +30,8 @@ type RecommendedTechnique = {
     technique_name: string;
     category: string;
     description: string;
+    image_url: string;
+
 };
 
 type learningStyle = {
@@ -89,7 +91,7 @@ export const LearningStyleResultComponent = () => {
 
     // const { Recommendation } = learningStyleJson;
 
-    console.log("career: ", recommendedCareer)
+    console.log("image: ", recommendedTechniques[1].image_url)
     // Chart
     const colors = ["#82ca9d", "#ffc658", "#d84d8b", "#8884d8"];
 
@@ -186,7 +188,7 @@ export const LearningStyleResultComponent = () => {
                                 title={item?.technique_name}
                                 desc={item?.description}
                                 type='learninigStyle'
-                            // image={item?.image_url}
+                                image={item.image_url}
                             />
 
                         ))}
