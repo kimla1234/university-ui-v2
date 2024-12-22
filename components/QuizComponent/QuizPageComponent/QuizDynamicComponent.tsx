@@ -18,6 +18,7 @@ import valueJson from '@/app/(user)/json/valueKh.json';
 import learningStyleJson from '@/app/(user)/json/learningStyleKh.json';
 // import allTestJson from '@/app/(user)/json/allTest.json';
 import { usePredictAssessmentMutation } from '@/redux/feature/assessment/quiz';
+import Loading from '@/components/General/Loading';
 
 
 
@@ -53,6 +54,7 @@ export default function QuizDynamicComponent() {
   // Always call hooks
   const [userResponses, setUserResponses] = useState<QuizResponse>({});
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Get the quiz data and total questions
   const quizData = Array.isArray(testType) ? null : quizDataMap[testType];
@@ -85,7 +87,15 @@ export default function QuizDynamicComponent() {
 
   const assessmentType = Array.isArray(testType) ? testType[0] : testType;
 
+  const showLoading = () => {
+    setTimeout(() => setIsLoading(true), 200); // Only show spinner after 200ms
+  };
+  const hideLoading = () => {
+    setIsLoading(false); // Hide immediately
+  };
+
   const handleResultClick = async () => {
+    showLoading();
     if (completedQuestions.length < totalQuestions) {
       toast.error("Please answer all the questions to see the result.");
       return;
@@ -96,30 +106,28 @@ export default function QuizDynamicComponent() {
       return;
     }
 
-    // will remove once the api is fix
-    // if(testType === 'interest'){
-    //   router.push(`/test-result/interest/1`);
-    // }
-    
 
     const processedResponses = processResponsesFromModifiedJSON(userResponses, quizData.questions);
 
-    
+
 
     try {
+      
       const result = await predictAssessment({
         assessmentType: assessmentType, // Use the normalized `assessmentType` here
         body: processedResponses,
       }).unwrap();
 
       const testUuid = result.payload.test_uuid
-      
+
       toast.success("Responses submitted successfully!");
 
       router.push(`/test-result/${assessmentType}/${testUuid}`); // Use `assessmentType` here too
     } catch (err) {
       toast.error("Failed to submit responses. Please try again.");
       console.log(err)
+    } finally {
+      hideLoading(); // Stop loading spinner
     }
   };
 
@@ -143,9 +151,15 @@ export default function QuizDynamicComponent() {
 
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75 z-50">
+          <Loading /> 
+        </div>
+      )}
+
       {/* Intro Section */}
-      <div className="bg-bgPrimaryLight pb-6">
+      <div className="bg-bgPrimaryLight">
         <QuizIntroContainer
           introTitle={introKh.title}
           introHightlight={introKh.highlight}
@@ -157,10 +171,12 @@ export default function QuizDynamicComponent() {
           RepresentedImageTitle={instructKh.representedImageTitle}
         />
 
-        {/* Progress Bar */}
-        <div className="max-w-7xl mx-auto my-4 md:my-6 px-4">
-          <p className="font-semibold mb-2 text-based md:text-lg">{progress} %</p>
-          <Progress value={progress} className="h-2 md:h-4" />
+      </div>
+
+      <div className="sticky top-0 z-10 bg-white pt-4 ">
+        <div className="max-w-7xl mx-auto py-4 px-4 flex gap-4 items-baseline">
+          <span className="flex items-center flex-shrink-0 font-semibold mb-2 text-based md:text-lg">{progress} %</span>
+          <Progress value={progress} className="h-4" />
         </div>
       </div>
 

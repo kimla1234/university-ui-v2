@@ -3,6 +3,8 @@ import UniversityDetailSkeleton from "@/components/SkeletonLoading/UniversityDet
 import CardUniversityDetail from "@/components/UniversityComponent/CardUniversityDetail";
 import { useAppSelector } from "@/redux/hooks";
 import React, { useState, useEffect } from "react";
+import Head from "next/head"; // Import Head from next/head for dynamic metadata
+
 
 type MajorType = {
   uuid: string;
@@ -72,9 +74,6 @@ export default function Page({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-
-
-
   // Fetch universities on component mount
   useEffect(() => {
     const fetchData = async () => {
@@ -138,9 +137,38 @@ export default function Page({ params }: { params: { id: string } }) {
   if (error) {
     return <div>Error: {error}</div>;
   }
+  // Dynamic Metadata setup
+  const university = universities.length > 0 ? universities[0] : null;
+  const title = university ? `${university.kh_name} - NormPlov` : "NormPlov";
+  const description = university
+    ? university.description
+    : "Explore universities with NormPlov.";
+  const logoUrl = university
+    ? `https://normplov-api.shinoshike.studio/${university.logo_url}`
+    : "/default-logo.png"; // Default logo if not available
+  const coverImage = university
+    ? `https://normplov-api.shinoshike.studio/${university.cover_image}`
+    : "/default-cover.png"; // Default cover image
 
   return (
     <div>
+      <Head>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={coverImage} />
+        <meta
+          property="og:url"
+          content={`https://normplov.shinoshike.studio/university/${params.id}`}
+        />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={coverImage} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <link rel="icon" href={logoUrl} />
+      </Head>
+
       {universities.length > 0 ? (
         universities.map((university: UniversityType, index) => (
           <CardUniversityDetail
@@ -163,7 +191,9 @@ export default function Page({ params }: { params: { id: string } }) {
             description={university.description}
             mission={university.mission}
             vision={university.vision}
-            majors={filteredMajors.length > 0 ? filteredMajors : [fallbackMajor]}
+            majors={
+              filteredMajors.length > 0 ? filteredMajors : [fallbackMajor]
+            }
             faculties={university.faculties || []}
           />
         ))

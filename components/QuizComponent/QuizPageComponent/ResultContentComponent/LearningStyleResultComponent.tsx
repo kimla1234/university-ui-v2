@@ -17,6 +17,7 @@ import {
 import { useFetchAssessmentDetailsQuery } from '@/redux/feature/assessment/result'
 import { RecommendationCard } from '../../RecommendationCard'
 import { useParams } from 'next/navigation'
+import Loading from '@/components/General/Loading';
 
 
 type ChartData = {
@@ -76,11 +77,11 @@ export const LearningStyleResultComponent = () => {
     console.log("data from learning: ", response)
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <div className=' w-full flex justify-center items-center'><Loading/></div>;
     }
 
     if (error || !response) {
-        return <p>Error loading data or data is missing.</p>;
+        return <div  className=' w-full flex justify-center items-center'><p >Error loading data or data is missing.</p></div>;
     }
 
     const recommendedTechniques = response?.[0]?.recommendedTechniques || [];

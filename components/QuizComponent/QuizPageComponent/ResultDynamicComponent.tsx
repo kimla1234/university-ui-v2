@@ -21,6 +21,7 @@ import { LearningStyleResultComponent } from './ResultContentComponent/LearningS
 import { InterestResultComponent } from './ResultContentComponent/InterestResultComponent';
 import { PersonalityResultComponent } from './ResultContentComponent/PersonalityResultComponent';
 import { ValueResultComponent } from './ResultContentComponent/ValueResultComponent';
+import Loading from '@/components/General/Loading';
 
 type IntroKh = {
     title: string;
@@ -58,7 +59,7 @@ export default function ResultDynamicComponent() {
 
     // Handle invalid or missing parameters
     if (!resultType || !uuid) {
-        return <p>Loading...</p>;
+        return <div className=' w-full flex justify-center items-center'><Loading/></div>;
     }
 
     // Ensure resultType is valid
