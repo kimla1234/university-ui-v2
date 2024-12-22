@@ -256,9 +256,12 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
                 unoptimized // This disables Next.js image optimization (optional if needed)
                 className="lg:w-60 lg:h-60 md:w-32 md:h-32 w-14 h-14 rounded-full lg:border-4 md:border-3 border border-primary"
               />
-              <div className="text-center md:text-left">
-                <h1 className="lg:text-5xl md:text-2xl text-lg font-bold text-textprimary mb-3">
+              <div className="text-start md:text-left">
+                <h1 className="lg:text-5xl  md:text-2xl ml-4 text-lg font-bold text-textprimary mb-0">
                   {kh_name}
+                </h1>
+                <h1 className="lg:text-5xl md:text-2xl ml-4 text-md font-bold text-textprimary mb-3">
+                  {en_name}
                 </h1>
               </div>
             </div>

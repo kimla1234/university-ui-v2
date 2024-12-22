@@ -14,8 +14,8 @@ export default function CardTeam() {
   }, []);
   return (
     <div className=" h-auto   grid w-auto auto-rows-fr grid-cols-1 lg:gap-1 md:gap-8 gap-3  lg:grid-cols-2 md:grid-cols-1">
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
-        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[250px]  flex items-center justify-center p-6">
+        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[50px]">
           {/* Main circular container */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -85,10 +85,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute lg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4  items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Back-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -151,8 +151,8 @@ export default function CardTeam() {
           </svg>
         </div>
       </div>
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
-        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[350px]  flex items-center justify-center p-6">
+        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[50px]">
           {/* Main circular container */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -202,7 +202,7 @@ export default function CardTeam() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="absolute -left-[120px] top-1/4 -translate-x-1/2 bg-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
                     >
-                      <span className="font-medium">Phy Lymann</span>
+                      <span className="font-medium">Yeng Sokroza</span>
                       <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -222,10 +222,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute lg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4  items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Front-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -288,8 +288,8 @@ export default function CardTeam() {
           </svg>
         </div>
       </div>
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
-        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[350px]  flex items-center justify-center p-6">
+        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[50px]">
           {/* Main circular container */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -321,7 +321,7 @@ export default function CardTeam() {
                   className=" lg:w-[350px] lg:h-[350px] md:w-[350px] md:h-[350px] w-[250px] h-[250px]   inset-8 rounded-full flex items-center justify-center "
                 >
                   <Image
-                    src="/assets/chhumhy.png"
+                    src="/assets/chhunhy.png"
                     alt="Team Member Image"
                     width={150}
                     height={150}
@@ -339,7 +339,7 @@ export default function CardTeam() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="absolute -left-[120px] top-1/4 -translate-x-1/2 bg-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
                     >
-                      <span className="font-medium">Phy Lymann</span>
+                      <span className="font-medium">Chhem Chhunhy</span>
                       <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -359,10 +359,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute lg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4  items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Front-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -425,8 +425,8 @@ export default function CardTeam() {
           </svg>
         </div>
       </div>
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
-        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[350px]  flex items-center justify-center p-6">
+        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[50px]">
           {/* Main circular container */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -476,7 +476,7 @@ export default function CardTeam() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="absolute -left-[120px] top-1/4 -translate-x-1/2 bg-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
                     >
-                      <span className="font-medium">Phy Lymann</span>
+                      <span className="font-medium">Channtha Seamey</span>
                       <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -496,10 +496,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute lg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Front-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -562,8 +562,8 @@ export default function CardTeam() {
           </svg>
         </div>
       </div>
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
-        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[350px]  flex items-center justify-center p-6">
+        <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[50px]">
           {/* Main circular container */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -613,7 +613,7 @@ export default function CardTeam() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="absolute -left-[120px] top-1/4 -translate-x-1/2 bg-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
                     >
-                      <span className="font-medium">Phy Lymann</span>
+                      <span className="font-medium">Hout Sovannarith</span>
                       <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -633,10 +633,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute llg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4  items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Front-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
@@ -699,7 +699,7 @@ export default function CardTeam() {
           </svg>
         </div>
       </div>
-      <div className="    w-auto h-[500px]  flex items-center justify-center p-6">
+      <div className="    w-auto lg:h-[500px] md:h-[500px] h-[450px]  flex items-center justify-center p-6">
         <div className="relative lg:w-[300px] lg:h-[300px] md:w-[300px] md:h-[300px] w-[200px] h-[200px]">
           {/* Main circular container */}
           <motion.div
@@ -750,7 +750,7 @@ export default function CardTeam() {
                       transition={{ delay: 0.7, duration: 0.5 }}
                       className="absolute -left-[120px] top-1/4 -translate-x-1/2 bg-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
                     >
-                      <span className="font-medium">Phy Lymann</span>
+                      <span className="font-medium">Chhoeurn Kimla</span>
                       <motion.div
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
@@ -770,10 +770,10 @@ export default function CardTeam() {
                       animate={{ x: 0, opacity: 1 }}
                       exit={{ x: -50, opacity: 0 }}
                       transition={{ delay: 0.9, duration: 0.5 }}
-                      className="absolute -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4 flex items-center gap-2"
+                      className="absolute lg:flex md:flex hidden -left-[150px] top-1/2 bg-pink-500 text-white rounded-full shadow-lg py-2 px-4  items-center gap-2"
                     >
                       <Zap className="w-4 h-4" />
-                      <span className="font-medium">Back-end Developer</span>
+                      <span className="font-medium lg:block md:block hidden">Front-end Developer</span>
                     </motion.div>
                   )}
                 </AnimatePresence>
