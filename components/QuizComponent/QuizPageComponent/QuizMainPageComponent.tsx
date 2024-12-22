@@ -22,7 +22,6 @@ import learningStyleJson from '@/app/(user)/json/learningStyleKh.json'
 
 
 export default function QuizMainPageComponent() {
-
     const router = useRouter();
 
     const handleQuizClick = (test: string) => {

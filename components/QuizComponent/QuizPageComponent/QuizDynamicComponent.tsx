@@ -96,15 +96,10 @@ export default function QuizDynamicComponent() {
       return;
     }
 
-    // will remove once the api is fix
-    // if(testType === 'interest'){
-    //   router.push(`/test-result/interest/1`);
-    // }
-    
 
     const processedResponses = processResponsesFromModifiedJSON(userResponses, quizData.questions);
 
-    
+
 
     try {
       const result = await predictAssessment({
@@ -113,7 +108,7 @@ export default function QuizDynamicComponent() {
       }).unwrap();
 
       const testUuid = result.payload.test_uuid
-      
+
       toast.success("Responses submitted successfully!");
 
       router.push(`/test-result/${assessmentType}/${testUuid}`); // Use `assessmentType` here too
@@ -143,9 +138,9 @@ export default function QuizDynamicComponent() {
 
 
   return (
-    <div className="w-full">
+    <div className="w-full relative">
       {/* Intro Section */}
-      <div className="bg-bgPrimaryLight pb-6">
+      <div className="bg-bgPrimaryLight">
         <QuizIntroContainer
           introTitle={introKh.title}
           introHightlight={introKh.highlight}
@@ -157,10 +152,12 @@ export default function QuizDynamicComponent() {
           RepresentedImageTitle={instructKh.representedImageTitle}
         />
 
-        {/* Progress Bar */}
-        <div className="max-w-7xl mx-auto my-4 md:my-6 px-4">
-          <p className="font-semibold mb-2 text-based md:text-lg">{progress} %</p>
-          <Progress value={progress} className="h-2 md:h-4" />
+      </div>
+
+      <div className="sticky top-0 z-10 bg-white pt-4 ">
+        <div className="max-w-7xl mx-auto py-4 px-4 flex gap-4 items-baseline">
+          <span className="flex items-center flex-shrink-0 font-semibold mb-2 text-based md:text-lg">{progress} %</span>
+          <Progress value={progress} className="h-4" />
         </div>
       </div>
 

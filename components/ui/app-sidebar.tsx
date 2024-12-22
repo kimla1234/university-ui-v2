@@ -1,5 +1,5 @@
 'use client'
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Plus } from "lucide-react";
 import chat from "@/public/chat/chat.png";
 import {
   Sidebar,
@@ -26,12 +26,14 @@ type AppSidebarProps = {
   chatData?: { [key: number]: Message[] };
   selectedChatId?: number | null;
   setSelectedChatId?: (id: number) => void;
+  createNewChat?: () => void;
 };
 
 export function AppSidebar({
     chatData = {}, // Default to empty object
     selectedChatId = null, // Default to null
     setSelectedChatId = () => {}, // Default to no-op
+    createNewChat = () => {},
 }: AppSidebarProps) {
 
   const router = useRouter()
@@ -46,7 +48,7 @@ export function AppSidebar({
         <SidebarGroup>
           <SidebarHeader>
             <SidebarMenu>
-              <SidebarMenuItem className="flex mb-2">
+              <SidebarMenuItem className="flex mb-2 justify-between">
                 <Button
                   variant="outline"
                   size="icon"
@@ -55,13 +57,22 @@ export function AppSidebar({
                 >
                   <ArrowLeft color="#0BBB8A" />
                 </Button>
-                <div className="flex gap-1 items-center ml-8">
+                <div className="flex gap-1 items-center ">
                   <p className="text-lg font-semibold">Message</p>
-                  <div className="w-6 h-6 flex justify-center items-center rounded-full text-xs font-normal bg-primary bg-opacity-10 text-primary">
+                  <div className="w-6 h-6 flex justify-center items-center rounded-full text-xs font-normal bg-gray-500 bg-opacity-10 text-gray-600">
                     {Object.keys(chatData).length}
                   </div>
                 </div>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="bg-primary bg-opacity-10 border-none hover:bg-opacity-20 rounded-full hover:bg-primary shadow-none p-2" 
+                  onClick={createNewChat}
+                >
+                  <Plus color="#0BBB8A" /> 
+                </Button>
               </SidebarMenuItem>
+              
             </SidebarMenu>
           </SidebarHeader>
           <SidebarGroupContent>
