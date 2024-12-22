@@ -9,6 +9,7 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 import { useParams } from 'next/navigation';
 import { useFetchAssessmentDetailsQuery } from '@/redux/feature/assessment/result';
 import { RecommendationCard } from '../../RecommendationCard';
+import Loading from '@/components/General/Loading';
 
 type ChartDataType = {
     label: string;
@@ -45,7 +46,7 @@ export const InterestResultComponent = () => {
     console.log("data from interest: ", response)
 
     if (isLoading) {
-        return <p>Loading...</p>;
+        return <div className='w-full flex justify-center items-center'><Loading/></div>;
     }
 
     if (error || !response) {

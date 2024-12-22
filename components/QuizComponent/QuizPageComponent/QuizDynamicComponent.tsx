@@ -18,6 +18,7 @@ import valueJson from '@/app/(user)/json/valueKh.json';
 import learningStyleJson from '@/app/(user)/json/learningStyleKh.json';
 // import allTestJson from '@/app/(user)/json/allTest.json';
 import { usePredictAssessmentMutation } from '@/redux/feature/assessment/quiz';
+import Loading from '@/components/General/Loading';
 
 
 
@@ -53,6 +54,7 @@ export default function QuizDynamicComponent() {
   // Always call hooks
   const [userResponses, setUserResponses] = useState<QuizResponse>({});
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Get the quiz data and total questions
   const quizData = Array.isArray(testType) ? null : quizDataMap[testType];
@@ -85,7 +87,15 @@ export default function QuizDynamicComponent() {
 
   const assessmentType = Array.isArray(testType) ? testType[0] : testType;
 
+  const showLoading = () => {
+    setTimeout(() => setIsLoading(true), 200); // Only show spinner after 200ms
+  };
+  const hideLoading = () => {
+    setIsLoading(false); // Hide immediately
+  };
+
   const handleResultClick = async () => {
+    showLoading();
     if (completedQuestions.length < totalQuestions) {
       toast.error("Please answer all the questions to see the result.");
       return;
@@ -102,6 +112,7 @@ export default function QuizDynamicComponent() {
 
 
     try {
+      
       const result = await predictAssessment({
         assessmentType: assessmentType, // Use the normalized `assessmentType` here
         body: processedResponses,
@@ -115,6 +126,8 @@ export default function QuizDynamicComponent() {
     } catch (err) {
       toast.error("Failed to submit responses. Please try again.");
       console.log(err)
+    } finally {
+      hideLoading(); // Stop loading spinner
     }
   };
 
@@ -139,6 +152,12 @@ export default function QuizDynamicComponent() {
 
   return (
     <div className="w-full relative">
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-gray-100 bg-opacity-75 z-50">
+          <Loading /> 
+        </div>
+      )}
+
       {/* Intro Section */}
       <div className="bg-bgPrimaryLight">
         <QuizIntroContainer
