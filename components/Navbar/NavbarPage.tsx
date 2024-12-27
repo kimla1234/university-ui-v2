@@ -10,14 +10,20 @@ const navLinks = [
   { href: "/", label: "ទំព័រដើម" },
   { href: "/university", label: "សាកល" },
   { href: "/jobs", label: "ការងារ" },
-  { href: "/new", label: "ព័ត៌មាន" },
-  { href: "/about-us", label: "អំពីយើង" },
+  { href: "/", label: "ព័ត៌មាន" },
+  { href: "/", label: "អំពីយើង" },
 ];
 
 export default function NavbarPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // For toggling mobile menu
+  const [pathname, setPathname] = useState(""); // State for current pathname
 
-  const pathname = window.location.pathname; // To check the current page path for styling
+  // Get pathname after the component mounts
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPathname(window.location.pathname);
+    }
+  }, []);
 
   const [isSticky, setIsSticky] = useState(false);
 
