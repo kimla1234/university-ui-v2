@@ -1,183 +1,227 @@
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { Phone, Mail, MapPin } from "lucide-react";
-
-export default function FooterPage() {
+import { MdOutlinePhoneInTalk } from "react-icons/md";
+import { MdOutlineMarkEmailUnread } from "react-icons/md";
+import { RiMapPinLine } from "react-icons/ri";
+export default function FooterHomePage() {
   return (
-    <footer className="border-t py-4   bg-slate-50">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mt-4 ">
-          {/* Logo and Description */}
-          <div className="flex justify-center">
-            <div className="space-y-4">
-              <Link href="/" className="text-emerald-500 text-xl font-semibold">
-                Logo
-              </Link>
-              <p className="text-textprimary block md:hidden lg:block text-md leading-relaxed">
-                នាំផ្លូវ គឺជាគេហទំព័រដែលជួយឲ្យអ្នក
-                ស្គាល់ខ្លួនឯងកាន់តែច្បាស់និងមាន ប្រសិទ្ធភាពក្នុងការចាប់យកអាជីពនា
-                ពេលបច្ចុប្បន្ននិងអនាគត ។
+    <div>
+      <div className=" bg-slate-50 w-full pt-9 flex border-t  justify-center">
+        <div className="lg:w-[80%] md:w-[90%] w-[90%] ">
+          <div className="flex flex-col justify-between  md:flex-row ">
+            <div className="lg:w-[300px] md:w-[216px] w-[300px]  ">
+              <p className="text-[18px] font-normal text-textprimary">
+                <h1 className="text-textprimary font-semibold lg:text-2xl md:text-xl">មាតិការ</h1>
               </p>
-              <p className="text-textprimary hidden md:block lg:hidden text-md leading-relaxed">
-                នាំផ្លូវ គឺជាគេហទំព័រដែលជួយឲ្យអ្នក
-                ស្គាល់ខ្លួនឯងកាន់តែច្បាស់និងមាន ប្រសិទ្ធភាពក្នុងការចាប់យកអាជីពនា
-                ពេលបច្ចប្បន្ននិងអនាគត ។
-              </p>
-            </div>
-          </div>
-
-          {/* Navigation */}
-          <div className="flex justify-start md:justify-center lg:justify-center ">
-            <div>
-              <h3 className="font-semibold text-2xl mb-4 text-textprimary">
-                មាតិការ
-              </h3>
-              <ul className="space-y-1">
-                <li>
-                  <Link
+              <ul>
+                <li className="mt-[15px]">
+                  <a
+                    className="text-deutziawhite text-textprimary  hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
                     href="/"
-                    className="text-textprimary hover:text-emerald-500"
                   >
                     ទំព័រដើម
-                  </Link>
+                  </a>
                 </li>
-                <li>
-                  <Link
-                    href="/test"
-                    className="text-textprimary hover:text-emerald-500"
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/our-tutors"
                   >
-                    តេស្ត
-                  </Link>
+                    សាកលវិទ្យាល័យ
+                  </a>
                 </li>
-                <li>
-                  <Link
-                    href="/university"
-                    className="text-textprimary hover:text-emerald-500"
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/become-a-tutor"
                   >
-                    គ្រឹស្ថានសិក្សា
-                  </Link>
+                    អាហារូបករណ៍
+                  </a>
                 </li>
-                <li>
-                  <Link
-                    href="/jobs"
-                    className="text-textprimary hover:text-emerald-500"
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/plans-and-pricing"
                   >
-                    ការងារ
-                  </Link>
+                    ព័ត៌មាន
+                  </a>
                 </li>
-                <li>
-                  <Link
-                    href="/policy"
-                    className="text-textprimary hover:text-emerald-500"
-                  >
-                    ឯកជនភាព
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/about-us"
-                    className="text-textprimary hover:text-emerald-500"
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px] mb-4">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/terms-and-conditions"
                   >
                     អំពីយើង
-                  </Link>
+                  </a>
                 </li>
               </ul>
             </div>
-          </div>
-
-          {/* Contact Information */}
-          <div className="flex justify-start md:justify-center lg:justify-center">
-            <div>
-              <h3 className="font-semibold text-2xl mb-4 text-textprimary">
-                ព័ត៌មានទំនាក់ទំនង
-              </h3>
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3">
-                  <Phone className="w-5 h-5 text-emerald-500 mt-1" />
-                  <div>
-                    <a href="tel:+855978443615" className="text-textprimary">
-                      +855978443615
-                    </a>
-                    <p className="text-gray-500 text-sm">លេខទូរស័ព្ទ</p>
-                  </div>
+            <div className="lg:w-[316px] md:w-[400px] w-[316px] ">
+              <p className="text-[16px] font-medium text-textprimary">
+                <h1 className="text-textprimary font-semibold  lg:text-2xl md:text-xl">សាកលវិទ្យាល័យល្បីៗ</h1>
+              </p>
+              <ul>
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/"
+                  >
+                    សាកលវិទ្យាល័យភូមិន្ទភ្នំពពេញ
+                  </a>
+                </li>
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/our-tutors"
+                  >
+                    វិទ្យាស្ថានចេ្ចកវិទ្យាកម្ពុជា
+                  </a>
+                </li>
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/become-a-tutor"
+                  >
+                    សាកលវិទ្យាល័យភូមិន្ទវិចិត្រសិល្បៈ
+                  </a>
+                </li>
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px]">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/plans-and-pricing"
+                  >
+                    សាកលវិទ្យាល័យន័រតុន
+                  </a>
+                </li>
+                <li className="lg:mt-[15px] md:mt-[10px] mt-[10px] mb-4">
+                  <a
+                    className="text-deutziawhite text-textprimary hover:text-deutziawhite/80 font-inter text-[16px] font-normal hover:font-semibold"
+                    href="/terms-and-conditions"
+                  >
+                    សាកលវិទ្យាល័យភូមិន្ទនីតិសាស្ត្រ
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div className="lg:w-[316px] md:w-[400px] ">
+              <div className="text-textprimary  font-bold lg:text-2xl md:text-xl">ព័ត៌មានទំនាក់ទំនង</div>
+              <div className="mt-[23px] flex">
+                <div className="flex h-[38px]  w-[38px] items-center justify-center rounded-[75%]">
+                <MdOutlinePhoneInTalk className="w-6 h-6 text-green-600"  />
                 </div>
-                <div className="flex items-start space-x-3">
-                  <Mail className="w-5 h-5 text-emerald-500 mt-1" />
-                  <div>
-                    <a
-                      href="mailto:normplov@gmail.com"
-                      className="text-textprimary"
-                    >
-                      normplov@gmail.com
-                    </a>
-                    <p className="text-gray-500 text-sm">អ៉ីម៉ែល</p>
-                  </div>
+                <div className="ml-[18px]">
+                  <a
+                    href="tel:+911800123444"
+                    className="font-Inter text-[16px] font-medium text-textprimary"
+                  >
+                    +91 1800123444
+                  </a>
+                  <p className="font-Inter text-[16px] font-medium text-textprimary">
+                    Support Number
+                  </p>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <MapPin className="w-5 h-5 text-emerald-500 mt-1" />
-                  <div>
-                    <a
-                      href="https://www.google.com/maps/dir/11.5762226,104.9272048/11.5784119,104.90279/@11.5682273,104.900408,14z/data=!3m1!4b1!4m4!4m3!1m1!4e1!1m0?entry=ttu"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-textprimary"
+              </div>
+              <div className="lg:mt-[23px] md:mt-[10px] mt-[10px] flex">
+                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
+                <MdOutlineMarkEmailUnread className="w-6 h-6 text-green-600"  />
+                </div>
+                <div className="ml-[18px]">
+                  <a
+                    href="mailto:help@lorem.com"
+                    className="font-Inter text-[16px] font-medium text-textprimary"
+                  >
+                    help@lorem.com
+                  </a>
+                  <p className="font-Inter text-[16px] font-medium text-textprimary">
+                    Support Email
+                  </p>
+                </div>
+              </div>
+              <div className="lg:mt-[23px] md:mt-[10px] mt-[10px]  flex">
+                <div className="flex h-[38px] w-[38px] items-center justify-center rounded-[75%]">
+                <RiMapPinLine className="w-6 h-6 text-green-600" />
+                </div>
+                <div className="ml-[18px]">
+                  <a
+                    href="mailto:help@lorem.com"
+                    className="font-Inter text-[16px] font-medium text-textprimary"
+                  >
+                    Sub Nerul, Mumbia, India, 
+                  </a>
+                  <p className="font-Inter text-[16px] font-medium text-textprimary">
+                  123456 Address
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 md:w-[316px] lg:block md:hidden hidden w-full flex-col justify-between text-textprimary sm:flex-row md:mt-0 md:max-w-[341px]">
+              <div className="mt-6 flex flex-col gap-4 sm:mt-0">
+                <p className="text-deutziawhite font-bold lg:text-2xl md:text-xl">
+                  ទាញយកកម្មវិធី
+                </p>
+                <div className="flex gap-4 sm:flex-col">
+                  <a target="_blank" href="#">
+                    <button
+                      type="button"
+                      className="flex bg-white border border-gray-200 items-center justify-center w-48 mt-3 text-slate-950 h-14 rounded-xl"
                     >
-                      សង្កាត់បឹកកក់១ ខណ្ឌទួលគោក រាជធានីភ្នំពេញ
-                    </a>
-                    <p className="text-gray-500 text-sm">អាសយដ្ឋាន</p>
-                  </div>
+                      <div className="mr-3">
+                        <svg viewBox="0 0 384 512" width="30">
+                          <path
+                            fill="currentColor"
+                            d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xs ">Download on the</div>
+                        <div className="-mt-1 font-sans text-xl font-semibold">
+                          App Store
+                        </div>
+                      </div>
+                    </button>
+                  </a>
+                  <a target="_blank" href="#">
+                    <button
+                      type="button"
+                      className="flex items-center border border-gray-200 justify-center w-48 mt-3 text-slate-950 bg-white rounded-lg h-14"
+                    >
+                      <div className="mr-3">
+                        <svg viewBox="30 336.7 120.9 129.2" width="30">
+                          <path
+                            fill="#FFD400"
+                            d="M119.2,421.2c15.3-8.4,27-14.8,28-15.3c3.2-1.7,6.5-6.2,0-9.7  c-2.1-1.1-13.4-7.3-28-15.3l-20.1,20.2L119.2,421.2z"
+                          ></path>
+                          <path
+                            fill="#FF3333"
+                            d="M99.1,401.1l-64.2,64.7c1.5,0.2,3.2-0.2,5.2-1.3  c4.2-2.3,48.8-26.7,79.1-43.3L99.1,401.1L99.1,401.1z"
+                          ></path>
+                          <path
+                            fill="#48FF48"
+                            d="M99.1,401.1l20.1-20.2c0,0-74.6-40.7-79.1-43.1  c-1.7-1-3.6-1.3-5.3-1L99.1,401.1z"
+                          ></path>
+                          <path
+                            fill="#3BCCFF"
+                            d="M99.1,401.1l-64.3-64.3c-2.6,0.6-4.8,2.9-4.8,7.6  c0,7.5,0,107.5,0,113.8c0,4.3,1.7,7.4,4.9,7.7L99.1,401.1z"
+                          ></path>
+                        </svg>
+                      </div>
+                      <div>
+                        <div className="text-xs">GET IT ON</div>
+                        <div className="-mt-1 font-sans text-xl font-semibold">
+                          Google Play
+                        </div>
+                      </div>
+                    </button>
+                  </a>
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Partner Logos */}
-          <div className="flex justify-start md:justify-center lg:justify-center">
-            <div>
-              <h3 className="font-semibold text-2xl mb-4 text-textprimary">
-                ឧបត្ថម្ភដោយ
-              </h3>
-              <div className="lg:space-y-4 md:space-y-4 space-y-0  flex md:block lg:flex  ">
-                <Image
-                  src="/assets/MPTC-logo.jpg"
-                  alt="Partner logo 1"
-                  width={200}
-                  height={60}
-                  className="object-contain"
-                />
-                <Image
-                  src="/assets/CBRD-logo.jpg"
-                  alt="Partner logo 2"
-                  width={200}
-                  height={60}
-                  className="object-contain "
-                />
-              </div>
-              <div className="flex justify-start lg:mt-0 md:mt-2 mt-2 ">
-                <Image
-                  src="/assets/istad_logo.jpg"
-                  alt="Partner logo 2"
-                  width={200}
-                  height={60}
-                  className="object-contain  w-[170px] h-[64px]"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-8 pt-4 border-t text-center text-textprimary">
-          <p>
-            2024 Copyright NormPlov by{" "}
-            <span className="text-green-700">
-              <Link href="https://www.cstad.edu.kh/">ISTAD</Link>
-            </span>
-            . All rights reserved.™
-          </p>
+          <hr className=" text-2xl mt-4 mb-2" />
+          <div className="flex justify-center items-center mb-2 text-[16px]">
+          <div className=" text-textprimary text-[16px]">Copyright © 2024 សាកលវិទ្យាល័យ</div>
+          </div> 
         </div>
       </div>
-    </footer>
+    </div>
   );
 }

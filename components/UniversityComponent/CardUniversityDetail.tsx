@@ -203,15 +203,15 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
   };
 
   return (
-    <div className="min-h-screen bg-bglight">
+    <div className="min-h-screen bg-bglight mt-[70px]">
       {/* Header */}
       <header className="relative">
         <div className="lg:w-full lg:h-[300px] md:w-full md:h-[200px] w-full h-[100px] overflow-hidden">
           <Image
             src={`${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${cover_image}`}
             alt={kh_name}
-            width={200}
-            height={200}
+            width={1000}
+            height={1000}
             unoptimized // This disables Next.js image optimization (optional if needed)
             className="w-full h-full object-cover"
           />
@@ -222,8 +222,8 @@ const handleFacultyChange = (selectedOption: SelectOption | null) => {
             <Image
               src={`${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${logo_url}`}
               alt={kh_name}
-              width={200}
-              height={200}
+              width={2000}
+              height={2000}
               unoptimized // This disables Next.js image optimization (optional if needed)
               className=" object-contain lg:w-60 lg:h-60 md:w-32 md:h-32 w-10 h-10  "
             />

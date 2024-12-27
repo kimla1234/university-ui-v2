@@ -73,7 +73,7 @@ export default function Page() {
   ];
 
   return (
-    <div className="min-h-screen bg-bglight">
+    <div className="min-h-screen bg-bglight mt-[70px]">
       {/* Header */}
       <header className="relative">
         <div className="lg:w-full lg:h-[300px] md:w-full md:h-[200px] w-full h-[100px] overflow-hidden">

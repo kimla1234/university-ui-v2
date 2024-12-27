@@ -1,23 +1,16 @@
 "use client";
-import CardUniversity from "@/components/UniversityComponent/CardUniversity";
-import FeatureGrid from "@//components/ui/FeatureGrid";
 import Image from "next/image";
 import Link from "next/link";
-import { GoArrowRight } from "react-icons/go";
+
 import { BiRightArrowAlt } from "react-icons/bi";
-import TeamProfilesHomePage from "@/components/ui/TeamProfilesHomePaage";
-import ProcessHomePage from "@/components/ui/ProcessHomePage";
-import { useGetUniversitiesQuery } from "@/redux/service/university";
-
+import TeamProfilesHomePage from "@//components/ui/TeamProfilesHomePaage";
+import NewsEventHomePage from "@/components/ui/NewsEventHomePage";
+import About_us_homepage from "@/components/ui/About_us_homepage";
+import Feedback from "@/components/ui/Feedback";
 import { useAppSelector } from "@/redux/hooks";
+import { useGetPopularSchoolsQuery } from "@/redux/service/university";
+import CardUniversity from "@/components/UniversityComponent/CardUniversity";
 import { useRouter } from "next/navigation";
-
-// Define the types for the props
-interface FeatureCardProps {
-  image: string; // Path to the image
-  title: string; // Title of the feature
-  description: string; // Description of the feature
-}
 
 // Type definition for universities
 type UniversityType = {
@@ -29,47 +22,52 @@ type UniversityType = {
   popular_major: string;
   logo_url: string | null; // Handle null value
 };
-
-
+// Define the types for the props
+interface FeatureCardProps {
+  image: string; // Path to the image
+  title: string; // Title of the feature
+  description: string; // Description of the feature
+}
 
 export default function Page() {
   const router = useRouter();
+
 
   const { search, province_uuid, page } = useAppSelector(
     (state) => state.filter
   ); // Ensure you have selectedUniversity in Redux
 
-  const { data} = useGetUniversitiesQuery({
+  const { data } = useGetPopularSchoolsQuery({
     search,
     province_uuid,
     page,
   });
-
   const handleCardClick = (id: string) => {
     router.push(`/university/${id}`);
   };
-
   return (
     <div className="w-full h-auto bg-white ">
       {/* Hero Section */}
-      <section className="relative ">
+      <section className="relative mt-10">
         {/* Text Content */}
         <div className="flex justify-center ">
-          <div className="container mx-auto px-4 pt-10 md:pt-16 lg:pt-16 text-center ">
+          <div className="container mx-auto px-4 pt-10 md:pt-16 lg:pt-24 text-center ">
             <h1 className="text-2xl md:text-5xl lg:text-6xl font-bold lg:mb-6 md:mb-4 mb-0">
-              <span className="text-emerald-500">ស្វែងរក</span>
-              <span className="text-orange-400">ជំនាញឯកទេស</span>
-              <span className="text-emerald-500">របស់អ្នក</span>
+              <span className="text-emerald-500">ស្វាគមន៍មកកាន់</span>
+              <span className="text-orange-400">សាកលវិទ្យាល័យ</span>
             </h1>
             <p className="lg:max-w-5xl md:max-w-2xl max-w-4xl mx-auto text-textprimary lg:text-2xl md:text-2xl text-md m-3">
-              រកឃើញសក្តានុពលរបស់អ្នក និងស្វែងរកជំនាញឯកទេស
-              នៅសាកលវិទ្យាល័យដែលស្របទៅនឹងចំណង់ចំណូលចិត្ត
+              នៅទីនេះ អ្នកអាចស្វែងរកព័ត៌មានលម្អិតអំពីសកលវិទ្យាល័យនានា
+              និងជម្រើសដែលល្អបំផុតសម្រាប់សិក្សា។ ថែមទាំង ការងារ
+              ព័ត៌មានអាហារូបករណ៍ របទៅនឹងចំណង់ចំណូលចិត្ត
               ចំណុចខ្លាំងនិងគោលដៅអាជីពនាពេលអនាគតរបស់អ្នក។
             </p>
 
-            <button className="bg-emerald-500 text-white px-6 py-2 md:px-8 md:py-3 lg:px-8 lg:py-3 rounded-xl text-md md:text-lg lg:text-lg hover:bg-emerald-600 transition-colors">
-              ចាប់ផ្តើម
-            </button>
+            <Link href="/university">
+              <button className="bg-emerald-500 text-white px-6 py-2 md:px-8 md:py-3 lg:px-8 lg:py-3 rounded-xl text-md md:text-lg lg:text-lg hover:bg-emerald-600 transition-colors">
+                ចាប់ផ្តើម
+              </button>
+            </Link>
           </div>
         </div>
         {/* Background Image */}
@@ -77,14 +75,15 @@ export default function Page() {
           <Image
             src="/assets/background-home-page.png"
             alt="Background Home Page"
-            width={2000}
-            height={2000}
+            width={200}
+            height={200}
             className="object-cover w-full h-[50%]"
           />
         </div>
       </section>
 
       {/* Who is Norm Plov for?   */}
+
       <section className="max-w-7xl mx-auto my-6">
         <div className="container px-4 lg:py-12 md:py-12 py-3">
           <h1 className="lg:text-5xl md:text-4xl text-2xl font-bold text-center lg:mb-12 md:m-12 mb-4 text-textprimary">
@@ -116,37 +115,37 @@ export default function Page() {
           </div>
         </div>
       </section>
-      {/* Feature Section */}
-      <section>
-        <FeatureGrid />
-      </section>
-      {/* ការងារដែលកំពុងមានតម្រូវការ Section */}
-      <section className=" bg-bglight p-6 ">
-        <div className="max-w-7xl mx-auto my-4 md:my-6 flex justify-center">
-          <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-center mb-2 text-textprimary">
-            ការងារដែលកំពុងមានតម្រូវការ
-          </h1>
-        </div>
-        <div className="max-w-7xl mx-auto my-4 md:my-6   ">
-          <Image
-            src="/assets/Bachart-XL-jobs.jpg"
-            alt="Barchart-XL-jobs"
-            width={2000}
-            height={2000}
-            className="object-cover w-full h-auto rounded-2xl "
-          />
-        </div>
 
-        <div className="  bg-primary lg:w-60 lg:h-12 md:w-60 md:h-12 w-40 h-11 flex justify-center rounded-3xl items-center max-w-7xl mx-auto my-4 md:my-6">
-          <Link
-            href="/"
-            className=" flex w-60 h-12 lg:space-x-3 md:space-x-3 space-x-1 justify-center items-center"
-          >
-            <div className="text-lg  text-white">ព័ត៌មានបន្ថែម</div>
-            <GoArrowRight className="lg:h-6 lg:w-6 md:h-6 md:w-6 h-5 w-5 text-white" />
-          </Link>
+      {/* Feature Section */}
+      <section className="flex   justify-center mb-2 lg:p-10 md:p-10 p-4">
+        <div className="max-w-7xl mx-auto my-4 md:my-6">
+          <div className="mt-8  border-l-8 border-textprimary">
+            <div className="lg:text-4xl  md:text-4xl text-2xl font-bold mt-2 mb-1 ml-4 text-textprimary">
+              ព័ត៌មាន និង ព្រឹត្តិការណ៍
+            </div>
+          </div>
+          <div className="mt-6 mb-8">
+            <div className="text-lg md:text-xl text-textprimary leading-relaxed">
+              ស្វែងរកព័ត៌មានអាហារូបករណ៍ សិក្ខាសាលា
+              និងពិព័រណ៍ការងារថ្មីៗជាមួយអនុវត្តន៍ចុងក្រោយ
+              សម្រាប់ការបង្កើតនូវឱកាសសិក្សា និងបន្ដអភិវឌ្ឍន៍ការងារអនាគត។
+              គ្រប់ព័ត៌មានចាំបាច់ដើម្បីជំរុញការស្វែងយល់ ការសិក្សា
+              និងការផ្សាយបន្ដនូវជំនាញវិជ្ជាជីវៈរបស់និស្សិត, មានផ្សាយនៅទីនេះ!
+            </div>
+          </div>
+
+          <NewsEventHomePage />
+          <div className=" flex justify-end items-center mt-6 ">
+            <div className="text-md md:text-xl lg:text-xl text-primary  font-kontumruy ">
+              ផ្សេងៗទៀត
+            </div>
+            <div className=" ">
+              <BiRightArrowAlt className="text-2xl ml-2 text-primary" />
+            </div>
+          </div>
         </div>
       </section>
+
       {/* University card Section */}
       <section className=" lg:p-10 md:p-10 p-4">
         <div className="max-w-7xl mx-auto my-4 md:my-6 flex lg:justify-between md:justify-between justify-center items-center">
@@ -154,7 +153,7 @@ export default function Page() {
             សាកលវិទ្យាល័យដែលមានប្រជាប្រិយភាព
           </h1>
           <Link
-            href="/university"
+            href="/"
             className="text-xl  lg:flex md:hidden hidden justify-center items-center font-bold text-center mb-2 text-textprimary"
           >
             <div className="flex">
@@ -164,19 +163,17 @@ export default function Page() {
           </Link>
         </div>
         <div className="max-w-7xl mx-auto my-4 md:my-6 mt-10  grid w-auto auto-rows-fr grid-cols-1 lg:gap-8 md:gap-8 gap-4 sm:mt-12 lg:grid-cols-2 md:grid-cols-1">
-          {data?.payload?.schools
-            .slice(0, 4)
-            .map((university: UniversityType, index: number) => (
-              <CardUniversity
-                key={index}
-                kh_name={university.kh_name}
-                en_name={university.en_name}
-                location={university.location}
-                popular_major={university.popular_major}
-                logo_url={university.logo_url || "/assets/default.png"}
-                onClick={() => handleCardClick(university.uuid)}
-              />
-            ))}
+          {data?.payload?.map((university: UniversityType, index: number) => (
+            <CardUniversity
+              key={index}
+              kh_name={university.kh_name}
+              en_name={university.en_name}
+              location={university.location}
+              popular_major={university.popular_major}
+              logo_url={university.logo_url || "/assets/default.png"}
+              onClick={() => handleCardClick(university.uuid)}
+            />
+          ))}
           <Link
             href=""
             className="text-xl  lg:hidden md:flex hidden justify-end mt-6 items-center font-bold text-center text-textprimary"
@@ -192,10 +189,12 @@ export default function Page() {
       </section>
       {/* Process card Section */}
       <section>
-        <ProcessHomePage />
+        <About_us_homepage />
       </section>
       {/* Feedback Section */}
-      <section>{/* <FeedbackHomePage/> */} </section>
+      <section className="flex justify-center mt-14 mb-14 ">
+        <Feedback />
+      </section>
     </div>
   );
 }

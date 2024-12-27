@@ -1,148 +1,92 @@
-"use client";
-import React, { useState } from "react";
-import Image from "next/image";
+"use client"
+import { useState, useEffect } from "react";// Correct usage of Link from react-router-dom
+import { Menu, X } from "lucide-react"; // For hamburger menu icon
+import { FaRegBell } from "react-icons/fa"; // For notification icon
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
-import { useGetUserQuery } from "@/redux/service/user"; // Import the user API
 
+
+// Navigation Links
 const navLinks = [
   { href: "/", label: "ទំព័រដើម" },
-  { href: "/test", label: "តេស្ត" },
-  { href: "/university", label: "គ្រឹះស្ថានសិក្សា" },
+  { href: "/university", label: "សាកល" },
   { href: "/jobs", label: "ការងារ" },
-  { href: "/privacy-policy", label: "ឯកជនភាព" },
+  { href: "/new", label: "ព័ត៌មាន" },
   { href: "/about-us", label: "អំពីយើង" },
 ];
 
-function getRandomColor(username: string) {
-  // Generate a random color based on the username
-  const colors = [
-    "bg-orange-300",
-    "bg-blue-300",
-    "bg-green-300",
-    "bg-yellow-300",
-    "bg-purple-300",
-    "bg-pink-300",
-    "bg-amber-300",
-    "bg-lime-300",
-    "bg-emerald-300",
-    "bg-teal-300",
-    "bg-cyan-300",
-    "bg-sky-300",
-    "bg-indigo-300",
-    "bg-violet-300",
-    "bg-fuchsia-300",
-    "bg-rose-300",
-  ];
-  const index = username.charCodeAt(0) % colors.length;
-  return colors[index];
-}
-
-
 export default function NavbarPage() {
-  const pathname = usePathname();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    // Fetch user data
-  const { data:user} = useGetUserQuery();
-  console.log("user data",user)
-  const userData=user?.payload
-  const avatarUrl = userData?.avatar
-  ? `${process.env.NEXT_PUBLIC_NORMPLOV_API_URL}${userData.avatar}`
-  : null;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false); // For toggling mobile menu
+
+  const pathname = window.location.pathname; // To check the current page path for styling
+
+  const [isSticky, setIsSticky] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY > 0) {
+      setIsSticky(true);
+    } else {
+      setIsSticky(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
     <div className="w-full bg-slate-50">
-      <header className="flex items-center justify-between py-4 px-4 md:px-6 lg:px-8  mx-auto">
+      <header
+        className={`flex items-center justify-between py-4 px-4 md:px-6 lg:px-6 mx-auto w-full fixed top-0 left-0 z-50 bg-white shadow-md transition-all duration-300 ${
+          isSticky ? "bg-opacity-90" : "bg-opacity-100"
+        }`}
+      >
         {/* Logo and Navigation Links */}
         <div className="flex items-center space-x-6 lg:space-x-8">
-          {/* Logo */}
-            <Link
-              href="/"
-              className="text-lg lg:text-xl text-green-700 font-bold"
-            >
-             <Image
-                src="/assets/logo.jpg"
-                alt="Logo"
-                width={200}
-                height={200}
-                className="object-contain lg:w-[50px] md:w-[50px] w-[40px]  "
-              />
+         
+            <Link href="/" className="text-lg lg:text-xl text-green-700">
+              សាកលវិទ្យាល័យ
             </Link>
-          
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex space-x-6 lg:space-x-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`text-base lg:text-lg ${
-                  pathname === link.href
-                    ? "text-green-700 font-bold  border-green-700"
-                    : "text-gray-800 hover:text-green-700"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
         </div>
 
-        {/* Language Selector and Sign-in */}
+        {/* Navigation Links and Sign-In Button */}
         <div className="hidden md:block lg:flex items-center space-x-6">
-          {/* LanguageSelector hidden on md (iPad) */}
-          <LanguageSelector />
-          {/* Sign in button */}
-          {user ? (
-            <div className="flex items-center space-x-4">
-              <div className="border-2 border-primary bg-[#fdfdfd] rounded-full p-1">
-              <Link href="/profile-quiz-history">
-              {
-                avatarUrl ?(
-                  <Image
-                  src={avatarUrl}
-                  alt="User Avatar"
-                  width={2000}
-                  height={2000}
-                  className="w-[35px] h-[35px] object-cover rounded-full"
-                />
-                ):(
-                  <div
-                      className={`w-12 h-12 flex items-center justify-center rounded-full text-white ${getRandomColor(
-                        userData?.username || "U"
-                      )}`}
-                    >
-                      {userData?.username.charAt(0).toUpperCase() || "U"}
-                    </div>
-                )
-              }
-                  {/* <Image
-                    src={avatarUrl || "/default-avatar.png"} // Fallback to default avatar if null
-                    alt="User Avatar"
-                    width={40}
-                    height={40}
-                    className="w-12 h-12 object-cover rounded-full"
-                  /> */}
-              </Link>
+          <div className="flex justify-end items-center">
+            {/* Navigation Links */}
+            <nav className="hidden md:flex w-[350px] space-x-6 md:space-x-0 lg:space-x-8">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href} // Corrected: using 'to' instead of 'href'
+                  className={`text-base md:text-md w-[70px] lg:text-lg whitespace-nowrap space-x-4  ${
+                    pathname === link.href
+                      ? "text-green-600 font-medium"
+                      : "text-gray-800 hover:text-green-600"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+
+            {/* Sign-In Button */}
+            <div className="flex space-x-4 lg:w-full md:w-[200px] justify-end">
+              <div className="w-[120px] flex justify-end items-center space-x-4">
+                <div className="rounded-full border border-primary">
+                  <FaRegBell className="text-xl mr-2 ml-2 mt-2 mb-2" />
+                </div>
               </div>
-              
-             
+              <Link
+                href="/login" // Corrected: using 'to' instead of 'href'
+                className="bg-emerald-500 text-white text-base text-center lg:text-lg rounded-xl lg:px-5 lg:py-2 md:px-2 md:py-1 px-5 py-2 lg:w-28 md:w-32 w-32"
+              >
+                ចុះឈ្មោះ
+              </Link>
             </div>
-          ) : (
-            <Link
-              href="/login"
-              className="bg-emerald-500 text-white text-base lg:text-lg rounded-xl px-5 py-2"
-            >
-              Sign in
-            </Link>
-          )}
-          {/* <Link
-            href="/login"
-            className="bg-emerald-500 text-white text-base lg:text-lg rounded-xl px-5 py-2"
-          >
-            Sign in
-          </Link> */}
+          </div>
         </div>
 
         {/* Hamburger Menu Button */}
@@ -156,12 +100,14 @@ export default function NavbarPage() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="w-full md:hidden px-4 py-4">
+        <div
+          className="w-full md:hidden fixed left-0 right-0 lg:mt-14 md:mt-14 -mt-8 px-4 py-4 bg-white shadow-md z-50"
+        >
           <nav className="flex flex-col space-y-4">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
-                href={link.href}
+                href={link.href} // Corrected: using 'to' instead of 'href'
                 className={`text-base ${
                   pathname === link.href
                     ? "text-green-700 font-bold"
@@ -173,58 +119,21 @@ export default function NavbarPage() {
               </Link>
             ))}
           </nav>
-          <div className="mt-4 flex items-center justify-between">
-            <LanguageSelector />
-            {user ? (
-            <div className="flex items-center space-x-4">
-              <div className="border-2 border-primary bg-[#fdfdfd] rounded-full p-1">
-              <Link href="/profile-quiz-history">
-                  <Image
-                    src={avatarUrl || "/default-avatar.png"} // Fallback to default avatar if null
-                    alt="User Avatar"
-                    width={2000}
-                    height={2000}
-                    className="w-[35px] h-[35px] object-cover rounded-full"
-                  />
-              </Link>
+          <div className="flex space-x-4 justify-end">
+            <div className="w-[120px] flex justify-end items-center space-x-4">
+              <div className="rounded-full border border-primary">
+                <FaRegBell className="text-xl mr-2 ml-2 mt-2 mb-2" />
               </div>
             </div>
-          ) : (
             <Link
-              href="/login"
-              className="bg-emerald-500 text-white text-base lg:text-lg rounded-xl px-5 py-2"
+              href="/login" // Corrected: using 'to' instead of 'href'
+              className="bg-emerald-500 text-white text-base lg:text-lg rounded-xl lg:px-5 lg:py-2 md:px-4 md:py-1 px-5 py-2"
             >
-              Sign in
+              ចុះឈ្មោះ
             </Link>
-          )}
           </div>
         </div>
       )}
-    </div>
-  );
-}
-
-function LanguageSelector() {
-  return (
-    <div className="flex md:hidden lg:flex items-center space-x-4">
-      <LanguageOption flag="/assets/khmer-flag.png" label="Khmer" />
-      <div className="h-6 border-l border-slate-400"></div>
-      <LanguageOption flag="/assets/english-flag.png" label="English" />
-    </div>
-  );
-}
-
-function LanguageOption({ flag, label }: { flag: string; label: string }) {
-  return (
-    <div className="flex items-center space-x-2">
-      <Image
-        src={flag}
-        alt={`${label} flag`}
-        width={24}
-        height={24}
-        className="w-6 h-6 object-cover rounded-full"
-      />
-      <span className="text-base lg:text-lg text-gray-800">{label}</span>
     </div>
   );
 }

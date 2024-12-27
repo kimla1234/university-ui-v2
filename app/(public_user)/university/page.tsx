@@ -115,7 +115,7 @@ export default function Page() {
   const coverImage = university ? `https://normplov-api.shinoshike.studio/${university.cover_image}` : "/default-cover.png"; // Default cover image
 
   return (
-    <div className="mb-5">
+    <div className="mb-5 mt-[70px]">
       <Head>
         <title>{title}</title>
         <meta name="description" content={description} />
